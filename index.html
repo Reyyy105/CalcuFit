@@ -166,7 +166,7 @@
   <header class="border-b border-brand-border bg-brand-bg/95 backdrop-blur sticky top-8 z-30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
       <!-- Brand Logo -->
-      <a href="#" class="flex items-center gap-3 group">
+      <a href="#" class="flex items-center gap-2 sm:gap-3 group shrink-0">
         <div class="w-10 h-10 rounded-xl bg-brand-card border border-brand-accent/30 flex items-center justify-center group-hover:scale-105 transition-transform shadow-glow-sm">
           <svg class="w-5 h-5 text-brand-accent" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
@@ -174,10 +174,10 @@
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xl font-extrabold tracking-tight text-white">CalcuFit</span>
-            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-brand-card text-brand-teal border border-brand-border">Hybrid OS</span>
+            <span class="text-lg sm:text-xl font-extrabold tracking-tight text-white">CalcuFit</span>
+            <span class="hidden sm:inline text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-brand-card text-brand-teal border border-brand-border">Hybrid OS</span>
           </div>
-          <p class="text-[11px] text-brand-muted tracking-tight font-medium">Daily BMI Assessment &amp; Body Weight Tracker</p>
+          <p class="hidden sm:block text-[11px] text-brand-muted tracking-tight font-medium">Daily BMI Assessment &amp; Body Weight Tracker</p>
         </div>
       </a>
 
@@ -190,19 +190,19 @@
       </nav>
 
       <!-- Primary Action: Open TRD Modal -->
-      <div class="flex items-center gap-3">
+      <div class="flex shrink-0 items-center gap-2 sm:gap-3">
         <button onclick="openTrdModal()" class="hidden xl:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border hover:border-brand-accent/50 text-slate-100 text-xs sm:text-sm font-semibold transition group shadow-card">
           <svg class="w-4 h-4 text-brand-accent group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           <span>Open TRD Spec</span>
         </button>
 
-        <a href="#simulator" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-brand-void text-xs sm:text-sm font-extrabold shadow-glow-sm transition">
+        <a href="#simulator" aria-label="Try Live Demo" title="Try Live Demo" class="inline-flex items-center gap-2 px-2.5 sm:px-4 py-2 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-brand-void text-xs sm:text-sm font-extrabold shadow-glow-sm transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Try Live Demo
+          <span class="hidden sm:inline">Try Live Demo</span>
         </a>
-        <a href="calcufit.apk" download="CalcuFit.apk" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-accent/40 hover:border-brand-accent text-brand-accent text-xs sm:text-sm font-extrabold transition">
+        <a href="./calcufit.apk" download="CalcuFit.apk" type="application/vnd.android.package-archive" aria-label="Download CalcuFit APK" title="Download CalcuFit APK" class="inline-flex items-center gap-2 px-2.5 sm:px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-accent/40 hover:border-brand-accent text-brand-accent text-xs sm:text-sm font-extrabold transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v12m0 0l-4-4m4 4l4-4M5 17v3h14v-3"/></svg>
-          Download APK
+          <span>Download<span class="hidden sm:inline"> APK</span></span>
         </a>
       </div>
     </div>
