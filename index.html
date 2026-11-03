@@ -182,7 +182,7 @@
       </a>
 
       <!-- Quick Links -->
-      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+      <nav class="hidden xl:flex items-center gap-7 text-sm font-medium text-slate-300">
         <a href="#features" class="hover:text-brand-accent transition">Capabilities</a>
         <a href="#architecture" class="hover:text-brand-accent transition">Architecture</a>
         <a href="#simulator" class="hover:text-brand-accent transition">Interactive Mockup</a>
@@ -191,7 +191,7 @@
 
       <!-- Primary Action: Open TRD Modal -->
       <div class="flex items-center gap-3">
-        <button onclick="openTrdModal()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border hover:border-brand-accent/50 text-slate-100 text-xs sm:text-sm font-semibold transition group shadow-card">
+        <button onclick="openTrdModal()" class="hidden xl:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border hover:border-brand-accent/50 text-slate-100 text-xs sm:text-sm font-semibold transition group shadow-card">
           <svg class="w-4 h-4 text-brand-accent group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           <span>Open TRD Spec</span>
         </button>
@@ -199,6 +199,10 @@
         <a href="#simulator" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-brand-void text-xs sm:text-sm font-extrabold shadow-glow-sm transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           Try Live Demo
+        </a>
+        <a href="calcufit.apk" download="CalcuFit.apk" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-accent/40 hover:border-brand-accent text-brand-accent text-xs sm:text-sm font-extrabold transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v12m0 0l-4-4m4 4l4-4M5 17v3h14v-3"/></svg>
+          Download APK
         </a>
       </div>
     </div>
@@ -426,6 +430,26 @@
           </figure>
         </div>
 
+        <div class="mt-10">
+          <div class="mb-5">
+            <h3 class="text-lg sm:text-xl font-bold text-white">See CalcuFit in action</h3>
+            <p class="text-sm text-brand-muted mt-1">Watch a quick walkthrough of the app interface.</p>
+          </div>
+          <video id="showcase-video" class="block w-full max-w-4xl mx-auto rounded-2xl border border-brand-border bg-black shadow-2xl" controls preload="metadata" playsinline poster="assets/app-gallery/feature-graphic.jpg" aria-label="CalcuFit app showcase video">
+            <source src="calcufit-showcase.mp4" type="video/mp4">
+            Your browser does not support HTML video. Please use a modern browser to watch the CalcuFit showcase.
+          </video>
+          <audio id="showcase-soundtrack" preload="auto" hidden>
+            <source src="showcase-soundtrack.wav" type="audio/wav">
+          </audio>
+          <div class="max-w-4xl mx-auto mt-3 flex flex-wrap items-center gap-3 text-xs text-brand-muted">
+            <p id="showcase-audio-status" aria-live="polite">An original instrumental soundtrack plays with the video.</p>
+            <button id="showcase-enable-sound" type="button" hidden class="rounded-lg border border-brand-accent/40 px-3 py-1.5 font-semibold text-brand-accent hover:bg-brand-accent/10 transition">
+              Enable soundtrack
+            </button>
+          </div>
+        </div>
+
         <div class="mt-12 md:mt-16">
           <div class="mb-5">
             <h3 class="text-lg sm:text-xl font-bold text-white">Google Play feature graphic</h3>
@@ -585,6 +609,8 @@
         <span>Consultant: <strong class="text-slate-300">Dr. Erick R. Abuzo</strong></span>
       </div>
       <div class="flex items-center gap-6">
+        <a href="app-description.html" class="hover:text-brand-accent transition">App description</a>
+        <a href="privacy-policy.html" class="hover:text-brand-accent transition">Privacy policy</a>
         <button onclick="openTrdModal()" class="hover:text-brand-accent transition">Technical Requirement Document</button>
         <button onclick="window.print()" class="hover:text-brand-accent transition">Print TRD</button>
         <a href="#simulator" class="hover:text-brand-accent transition">Interactive Testbed</a>
@@ -1042,6 +1068,56 @@
     const circumference = 2 * Math.PI * 90; // ~565.487
     let simGender = "Male";
     let simAge = 25;
+
+    const showcaseVideo = document.getElementById('showcase-video');
+    const showcaseSoundtrack = document.getElementById('showcase-soundtrack');
+    const showcaseAudioStatus = document.getElementById('showcase-audio-status');
+    const enableShowcaseSoundButton = document.getElementById('showcase-enable-sound');
+
+    async function syncShowcaseSoundtrack() {
+      if (showcaseVideo.paused || showcaseVideo.ended) {
+        showcaseSoundtrack.pause();
+        return;
+      }
+
+      showcaseSoundtrack.currentTime = showcaseVideo.currentTime;
+      showcaseSoundtrack.playbackRate = showcaseVideo.playbackRate;
+      showcaseSoundtrack.muted = showcaseVideo.muted;
+      showcaseSoundtrack.volume = showcaseVideo.volume;
+
+      try {
+        await showcaseSoundtrack.play();
+        enableShowcaseSoundButton.hidden = true;
+        showcaseAudioStatus.textContent = 'Original instrumental soundtrack playing.';
+      } catch (error) {
+        console.error('Showcase soundtrack playback failed:', error);
+        showcaseAudioStatus.textContent = 'Sound could not start automatically. Select Enable soundtrack to hear the video.';
+        enableShowcaseSoundButton.hidden = false;
+      }
+    }
+
+    showcaseVideo.addEventListener('play', syncShowcaseSoundtrack);
+    showcaseVideo.addEventListener('pause', () => showcaseSoundtrack.pause());
+    showcaseVideo.addEventListener('ended', () => {
+      showcaseSoundtrack.pause();
+      showcaseSoundtrack.currentTime = 0;
+      showcaseAudioStatus.textContent = 'Showcase finished. Replay the video to hear the soundtrack again.';
+    });
+    showcaseVideo.addEventListener('seeking', () => showcaseSoundtrack.pause());
+    showcaseVideo.addEventListener('seeked', syncShowcaseSoundtrack);
+    showcaseVideo.addEventListener('ratechange', () => {
+      showcaseSoundtrack.playbackRate = showcaseVideo.playbackRate;
+    });
+    showcaseVideo.addEventListener('volumechange', () => {
+      showcaseSoundtrack.muted = showcaseVideo.muted;
+      showcaseSoundtrack.volume = showcaseVideo.volume;
+    });
+    showcaseSoundtrack.addEventListener('error', () => {
+      showcaseAudioStatus.textContent = 'The soundtrack file could not be loaded. Check that the showcase audio file is available.';
+      enableShowcaseSoundButton.hidden = true;
+      console.error('Showcase soundtrack failed to load:', showcaseSoundtrack.error);
+    });
+    enableShowcaseSoundButton.addEventListener('click', syncShowcaseSoundtrack);
 
     /* Gender and Age Interactive Handlers for Phone Mockup */
     function simSetGender(gender) {
