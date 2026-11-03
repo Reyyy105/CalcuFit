@@ -1,1313 +1,1014 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CalcuFit | Daily BMI Assessment & Body Weight Tracker</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CalcuFit | Daily BMI Assessment & Body Weight Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'monospace'],
+            },
+            colors: {
+              brand: {
+                void: '#070C12',
+                bg: '#0B111A',
+                card: '#121924',
+                cardHover: '#16202E',
+                border: '#1C2738',
+                accent: '#00D29D',
+                accentHover: '#00B889',
+                teal: '#14B8A6',
+                cyan: '#06B6D4',
+                muted: '#7B8EA5',
+                slate: '#94A3B8',
+              },
+            },
+            boxShadow: {
+              glow: '0 0 35px -5px rgba(0, 210, 157, 0.35)',
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --bg: #070c12;
+        --bg-panel: #0b111a;
+        --card: #121924;
+        --border: #1c2738;
+        --accent: #00d29d;
+        --accent-hover: #00b889;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+      }
 
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
-          },
-          colors: {
-            brand: {
-              void: '#070C12',
-              bg: '#0B111A',
-              card: '#121924',
-              cardHover: '#16202E',
-              border: '#1C2738',
-              borderLighter: '#2A3B54',
-              accent: '#00D29D',
-              accentHover: '#00B889',
-              teal: '#14B8A6',
-              cyan: '#06B6D4',
-              emeraldBg: 'rgba(0, 210, 157, 0.12)',
-              muted: '#7B8EA5',
-              subtle: '#475569',
-              slate: '#94A3B8'
-            }
-          },
-          boxShadow: {
-            glow: '0 0 35px -5px rgba(0, 210, 157, 0.35)',
-            'glow-sm': '0 0 15px -3px rgba(0, 210, 157, 0.3)',
-            modal: '0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 1px 1px rgba(28, 39, 56, 0.9)'
-          }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .app-shell {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        width: min(1120px, calc(100% - 1.5rem));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        background: rgba(11, 17, 26, 0.9);
+        border-bottom: 1px solid rgba(28, 39, 56, 0.9);
+        position: sticky;
+        top: 0;
+        z-index: 40;
+      }
+
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        min-height: 52px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        border: 1px solid rgba(0, 210, 157, 0.2);
+        background: rgba(0, 210, 157, 0.08);
+        color: #76f0ca;
+        border-radius: 999px;
+        padding: 0.4rem 0.8rem;
+        font-weight: 700;
+        font-size: 0.72rem;
+      }
+
+      .dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 999px;
+        background: var(--accent);
+        box-shadow: 0 0 12px rgba(0, 210, 157, 0.9);
+      }
+
+      .topbar-text {
+        color: var(--muted);
+        font-size: 0.72rem;
+        display: inline-block;
+      }
+
+      .site-header {
+        background: rgba(11, 17, 26, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(28, 39, 56, 0.9);
+        position: sticky;
+        top: 52px;
+        z-index: 30;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        min-height: 84px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        text-decoration: none;
+        color: var(--text);
+      }
+
+      .brand-mark {
+        width: 2.7rem;
+        height: 2.7rem;
+        background: var(--card);
+        border: 1px solid rgba(0, 210, 157, 0.25);
+        border-radius: 0.85rem;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 0 15px rgba(0, 210, 157, 0.18);
+      }
+
+      .brand-mark svg { width: 1.35rem; height: 1.35rem; fill: var(--accent); }
+      .brand-name {
+        font-size: clamp(1.1rem, 2vw, 1.5rem);
+        font-weight: 800;
+        letter-spacing: -0.05em;
+      }
+
+      .tiny-tag {
+        display: inline-block;
+        margin-left: 0.4rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 999px;
+        font-size: 0.56rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border: 1px solid rgba(28, 39, 56, 0.8);
+        color: var(--accent);
+        background: rgba(20, 184, 166, 0.06);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 1.6rem;
+        font-size: 0.92rem;
+      }
+
+      .nav a {
+        color: #dfe7f3;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .nav a:hover { color: var(--accent); }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        border-radius: 0.9rem;
+        padding: 0.8rem 1.1rem;
+        font-weight: 800;
+        font-size: 0.8rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+        white-space: nowrap;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #03221a;
+        box-shadow: 0 0 30px rgba(0, 210, 157, 0.2);
+      }
+      .btn-primary:hover { background: var(--accent-hover); }
+
+      .btn-secondary {
+        background: rgba(18, 25, 36, 0.9);
+        border-color: rgba(28, 39, 56, 0.9);
+        color: #f1f5f9;
+      }
+      .btn-secondary:hover { background: #16202e; }
+
+      .btn-download {
+        background: rgba(18, 25, 36, 0.9);
+        border-color: rgba(0, 210, 157, 0.35);
+        color: #e5fff7;
+      }
+      .btn-download:hover { background: #16202e; }
+
+      .hero {
+        padding: 3.25rem 0 4rem;
+        border-bottom: 1px solid rgba(28, 39, 56, 0.9);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        align-items: center;
+        gap: 2.5rem;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.5rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        background: rgba(18, 25, 36, 0.82);
+        border: 1px solid rgba(28, 39, 56, 0.9);
+        color: #cbd5e1;
+      }
+
+      .eyebrow .dot {
+        width: 0.52rem;
+        height: 0.52rem;
+      }
+
+      h1 {
+        margin: 1.2rem 0 0.9rem;
+        font-size: clamp(2.3rem, 5vw, 4.4rem);
+        line-height: 1.06;
+        letter-spacing: -0.06em;
+      }
+
+      .gradient-text {
+        background: linear-gradient(90deg, var(--accent), #5eead4, #67e8f9);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .lead {
+        max-width: 42rem;
+        margin: 0;
+        color: #d7e1ee;
+        font-size: 1.05rem;
+        line-height: 1.7;
+      }
+
+      .author-box {
+        margin-top: 1.35rem;
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        background: rgba(18, 25, 36, 0.8);
+        border: 1px solid rgba(28, 39, 56, 0.9);
+        border-radius: 1rem;
+        padding: 1rem 1.1rem;
+        max-width: 35rem;
+      }
+
+      .author-icon {
+        width: 2.7rem;
+        height: 2.7rem;
+        border-radius: 0.85rem;
+        background: rgba(0, 210, 157, 0.12);
+        border: 1px solid rgba(0, 210, 157, 0.3);
+        color: var(--accent);
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+      }
+
+      .author-box small {
+        display: block;
+        margin-bottom: 0.2rem;
+        color: #9fb0c3;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-size: 0.58rem;
+        font-weight: 800;
+      }
+
+      .author-box strong { color: #f8fafc; }
+      .author-box span { color: #d8e4f3; }
+
+      .stats {
+        margin-top: 1.4rem;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.8rem;
+        max-width: 35rem;
+      }
+
+      .stat {
+        background: rgba(18, 25, 36, 0.72);
+        border: 1px solid rgba(28, 39, 56, 0.94);
+        border-radius: 0.9rem;
+        padding: 0.85rem 0.9rem;
+      }
+
+      .stat-label {
+        display: block;
+        font-size: 0.58rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #7f8ea5;
+      }
+
+      .stat strong {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin-top: 0.4rem;
+        font-size: 0.92rem;
+        color: #e2e8f0;
+      }
+
+      .hero-actions {
+        margin-top: 1.6rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+      }
+
+      .phone-panel {
+        display: flex;
+        justify-content: center;
+      }
+
+      .phone-shell {
+        width: min(100%, 360px);
+        background: #03070b;
+        border: 4px solid #2a374a;
+        border-radius: 2.8rem;
+        padding: 0.9rem;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+        position: relative;
+      }
+
+      .notch {
+        position: absolute;
+        top: 1.1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 7rem;
+        height: 1.1rem;
+        background: #000;
+        border-radius: 999px;
+        z-index: 2;
+      }
+
+      .screen {
+        background: #0b111a;
+        border-radius: 2.2rem;
+        border: 1px solid rgba(28, 39, 56, 0.9);
+        padding: 1.05rem 0.95rem 0.85rem;
+        min-height: 42rem;
+      }
+
+      .screen-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 0.6rem;
+      }
+
+      .brand-mini {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 800;
+      }
+
+      .mini-icon {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.7rem;
+        background: rgba(0, 210, 157, 0.12);
+        display: grid;
+        place-items: center;
+        color: var(--accent);
+      }
+
+      .status-pill {
+        font-size: 0.56rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(20, 24, 33, 0.8);
+        color: #a7b5c7;
+        border: 1px solid rgba(34, 46, 64, 0.8);
+        border-radius: 999px;
+        padding: 0.35rem 0.65rem;
+        font-weight: 700;
+      }
+
+      .selector-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.55rem;
+        margin-top: 0.9rem;
+      }
+
+      .selector {
+        background: #121924;
+        border: 1px solid #1c2738;
+        border-radius: 0.8rem;
+        padding: 0.15rem;
+      }
+
+      .selector-row {
+        display: flex;
+        gap: 0.15rem;
+      }
+
+      .selector button {
+        flex: 1;
+        border: none;
+        border-radius: 0.7rem;
+        background: transparent;
+        color: #dfeaf8;
+        font-weight: 800;
+        font-size: 0.68rem;
+        padding: 0.58rem 0.3rem;
+        cursor: pointer;
+      }
+
+      .selector button.active {
+        background: rgba(0, 210, 157, 0.18);
+        color: #61f2c3;
+      }
+
+      .age-box {
+        background: #121924;
+        border: 1px solid #1c2738;
+        border-radius: 0.8rem;
+        padding: 0.5rem 0.7rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .age-box label {
+        color: #7d8ea5;
+        font-size: 0.68rem;
+        font-weight: 800;
+      }
+
+      .age-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .stepper {
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 0.45rem;
+        border: 1px solid #2a374a;
+        background: #182333;
+        color: #f8fafc;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .gauge-wrap {
+        position: relative;
+        width: 12rem;
+        height: 12rem;
+        margin: 0.8rem auto 0;
+      }
+
+      .gauge-wrap svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+
+      .gauge-center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .gauge-center small {
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #8798b2;
+        font-size: 0.52rem;
+        font-weight: 800;
+      }
+
+      .gauge-center strong {
+        display: block;
+        font-size: 2.5rem;
+        margin: 0.2rem 0;
+        letter-spacing: -0.06em;
+      }
+
+      .gauge-tag {
+        padding: 0.25rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.6rem;
+        font-weight: 800;
+        background: rgba(0, 210, 157, 0.12);
+        color: var(--accent);
+      }
+
+      .mini-cards {
+        margin-top: 0.8rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.55rem;
+      }
+
+      .mini-card {
+        background: #121924;
+        border: 1px solid #1c2738;
+        border-radius: 0.8rem;
+        padding: 0.75rem 0.7rem;
+      }
+
+      .mini-card small {
+        display: block;
+        color: #7688a5;
+        font-size: 0.52rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 800;
+      }
+
+      .mini-card strong {
+        display: block;
+        margin-top: 0.35rem;
+        font-size: 0.7rem;
+        color: #f8fafc;
+      }
+
+      .profile-panel {
+        margin-top: 0.8rem;
+        background: #121924;
+        border: 1px solid #1c2738;
+        border-radius: 0.8rem;
+        padding: 0.8rem 0.7rem 0.55rem;
+      }
+
+      .profile-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.4rem;
+        padding-bottom: 0.5rem;
+      }
+
+      .profile-row + .profile-row {
+        border-top: 1px solid rgba(28, 39, 56, 0.85);
+        padding-top: 0.55rem;
+      }
+
+      .profile-row span {
+        color: #7f8ea5;
+        font-size: 0.68rem;
+        font-weight: 700;
+      }
+
+      .profile-row strong {
+        font-size: 0.68rem;
+        color: #f8fafc;
+      }
+
+      .screen-action {
+        width: 100%;
+        margin-top: 0.8rem;
+        border: none;
+        border-radius: 0.9rem;
+        background: var(--accent);
+        color: #03221a;
+        padding: 0.9rem 1rem;
+        font-weight: 900;
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .content {
+        flex: 1;
+      }
+
+      .section {
+        padding: 4rem 0;
+      }
+
+      .section-head {
+        margin-bottom: 1.8rem;
+      }
+
+      .section-head h2 {
+        margin: 0.55rem 0 0;
+        font-size: clamp(1.7rem, 4vw, 2.8rem);
+        letter-spacing: -0.05em;
+      }
+
+      .muted { color: #93a4bb; }
+
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.2rem;
+      }
+
+      .gallery-card {
+        background: rgba(18, 25, 36, 0.8);
+        border: 1px solid rgba(28, 39, 56, 0.9);
+        border-radius: 1.2rem;
+        overflow: hidden;
+      }
+
+      .gallery-card img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .gallery-card figcaption {
+        padding: 0.9rem 1rem;
+        font-weight: 700;
+        color: #e2e8f0;
+      }
+
+      .video-wrap {
+        margin-top: 2rem;
+      }
+
+      video {
+        width: 100%;
+        border-radius: 1.2rem;
+        border: 1px solid rgba(28, 39, 56, 0.9);
+        background: #000;
+      }
+
+      .footer {
+        border-top: 1px solid rgba(28, 39, 56, 0.9);
+        background: rgba(11, 17, 26, 0.9);
+        padding: 1.4rem 0 2rem;
+      }
+
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1rem 1.3rem;
+      }
+
+      .footer a {
+        color: #d8e4f3;
+        text-decoration: none;
+      }
+
+      .footer a:hover { color: var(--accent); }
+
+      @media (max-width: 1024px) {
+        .nav { display: none; }
+      }
+
+      @media (max-width: 820px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar-inner {
+          justify-content: center;
+          text-align: center;
+          padding: 0.4rem 0;
+        }
+
+        .topbar-text {
+          display: none;
+        }
+
+        .gallery {
+          grid-template-columns: 1fr;
         }
       }
-    }
-  </script>
 
-  <style>
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 7px; height: 7px; }
-    ::-webkit-scrollbar-track { background: #070C12; }
-    ::-webkit-scrollbar-thumb { background: #1C2738; border-radius: 999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #00D29D; }
+      @media (max-width: 560px) {
+        .container {
+          width: min(100% - 1rem, 1120px);
+        }
 
-    /* SVG Radial Gauge transition */
-    .meter-stroke-progress {
-      stroke-dasharray: 565.48; /* 2 * PI * 90 */
-      stroke-dashoffset: 254.46;
-      transition: stroke-dashoffset 0.85s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
-    }
+        .header-inner {
+          min-height: 72px;
+        }
 
-    /* Modal Animation */
-    .modal-backdrop {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .modal-backdrop.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .modal-container {
-      transform: scale(0.96) translateY(18px);
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .modal-backdrop.open .modal-container {
-      transform: scale(1) translateY(0);
-    }
+        .brand-name {
+          font-size: 1rem;
+        }
 
-    .app-gallery-track {
-      scrollbar-width: thin;
-      scrollbar-color: #2A3B54 #121924;
-      scroll-snap-type: x mandatory;
-    }
-    .app-gallery-item {
-      scroll-snap-align: start;
-    }
+        .tiny-tag {
+          display: none;
+        }
 
-    /* Print Formatting for TRD */
-    @media print {
-      body * { visibility: hidden !important; }
-      #trd-modal, #trd-modal * { visibility: visible !important; }
-      #trd-modal { position: absolute; left: 0; top: 0; width: 100%; background: #ffffff !important; color: #000000 !important; }
-      #trd-modal .bg-brand-bg, #trd-modal .bg-brand-card, #trd-modal .bg-brand-void { background: #ffffff !important; color: #111827 !important; border-color: #e5e7eb !important; }
-      .no-print { display: none !important; }
-    }
-  </style>
-</head>
+        .header-actions {
+          width: 100%;
+          justify-content: flex-end;
+        }
 
-<body class="bg-brand-void text-slate-100 font-sans antialiased selection:bg-brand-accent selection:text-brand-void min-h-screen flex flex-col justify-between">
+        .header-actions .btn-secondary,
+        .header-actions .btn-primary {
+          display: none;
+        }
 
-  <!-- ======================================================== -->
-  <!-- 1. TOP UTILITY STRIP                                     -->
-  <!-- ======================================================== -->
-  <div class="border-b border-brand-border/60 bg-brand-bg/90 backdrop-blur-md sticky top-0 z-40 text-xs py-2 px-4 transition-all">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-brand-accent font-semibold border border-brand-accent/20">
-          <span class="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse"></span> Offline Native APK
-        </span>
-        <span class="hidden sm:inline text-brand-muted">MIT App Inventor + Chromium Local WebViewer Architecture</span>
+        .btn-download {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .hero {
+          padding-top: 2.25rem;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .hero-actions .btn {
+          width: 100%;
+        }
+
+        .stats {
+          grid-template-columns: 1fr;
+        }
+
+        .phone-shell {
+          width: min(100%, 290px);
+        }
+
+        .screen {
+          min-height: 38rem;
+        }
+
+        .selector-grid,
+        .mini-cards {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-inner {
+          justify-content: center;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="topbar">
+        <div class="container topbar-inner">
+          <div class="pill">
+            <span class="dot"></span>
+            <span>Offline Native APK</span>
+          </div>
+          <span class="topbar-text">MIT App Inventor + Chromium Local WebViewer Architecture</span>
+        </div>
       </div>
 
-      <div class="flex items-center gap-3 sm:gap-4 font-medium">
-        <div class="hidden lg:flex items-center gap-2 text-[11px] text-brand-muted">
-          <span>Author: <strong class="text-slate-200">Johnrey Camacho</strong></span>
-          <span class="text-brand-border">|</span>
-          <span>Consultant: <strong class="text-slate-200">Dr. Erick R. Abuzo</strong></span>
-        </div>
-        <span class="hidden lg:inline text-brand-border">|</span>
-        <button onclick="openTrdSection('sec-protocol')" class="text-brand-muted hover:text-brand-accent transition flex items-center gap-1">
-          <svg class="w-3.5 h-3.5 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-          <span class="hidden md:inline">IPC</span> Protocol Spec
-        </button>
-        <span class="text-brand-border">|</span>
-        <div class="relative group">
-          <button id="help-menu-button" onclick="toggleHelpDropdown()" class="text-slate-200 hover:text-brand-accent transition flex items-center gap-1 font-semibold py-1">
-            <span>Help</span>
-            <svg class="w-3.5 h-3.5 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <!-- Help Dropdown Menu -->
-          <div id="help-dropdown" class="hidden absolute right-0 mt-1 w-72 bg-brand-card border border-brand-border rounded-xl shadow-2xl p-1.5 z-50 text-left">
-            <div class="px-3 py-2 text-[10px] font-bold text-brand-muted tracking-wider uppercase border-b border-brand-border/60">Documentation &amp; Specs</div>
-            <button onclick="openTrdModal('sec-exec'); hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-200 hover:text-brand-accent flex items-center justify-between transition">
-              <span>Technical Requirement Doc (TRD)</span>
-              <span class="text-[10px] bg-brand-accent/10 text-brand-accent px-1.5 py-0.5 rounded font-mono">v1.3</span>
-            </button>
-            <button onclick="openTrdModal('sec-team'); hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-200 hover:text-brand-accent transition">
-              Authorship &amp; Advisory Team
-            </button>
-            <button onclick="openTrdModal('sec-arch'); hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-200 hover:text-brand-accent transition">
-              System Architecture &amp; Blocks
-            </button>
-            <button onclick="openTrdModal('sec-matrix'); hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-200 hover:text-brand-accent transition">
-              QA &amp; Verification Matrix
-            </button>
-            <div class="border-t border-brand-border/60 mt-1 pt-1">
-              <a href="#simulator" onclick="hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-300 block transition">
-                Interactive Simulator
-              </a>
-            </div>
+      <header class="site-header">
+        <div class="container header-inner">
+          <a href="#" class="brand" aria-label="CalcuFit home">
+            <span class="brand-mark">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35 10.55 20.03C5.4 15.36 2 12.28 2 8.5A4.5 4.5 0 0 1 6.5 4c1.74 0 3.41.81 4.5 2.09A6.21 6.21 0 0 1 15.5 4 4.5 4.5 0 0 1 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35Z"/></svg>
+            </span>
+            <span>
+              <span class="brand-name">CalcuFit</span>
+              <span class="tiny-tag">Hybrid OS</span>
+            </span>
+          </a>
+
+          <nav class="nav" aria-label="Main navigation">
+            <a href="#features">Capabilities</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#simulator">Interactive Mockup</a>
+            <a href="#matrix">Clinical Ranges</a>
+          </nav>
+
+          <div class="header-actions">
+            <a href="#simulator" class="btn btn-secondary">Try Live Demo</a>
+            <a href="calcufit%20.apk" download="CalcuFit.apk" class="btn btn-download">Download APK</a>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </header>
 
-  <!-- ======================================================== -->
-  <!-- 2. MAIN NAVIGATION                                       -->
-  <!-- ======================================================== -->
-  <header class="border-b border-brand-border bg-brand-bg/95 backdrop-blur sticky top-8 z-30">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
-      <!-- Brand Logo -->
-      <a href="#" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl bg-brand-card border border-brand-accent/30 flex items-center justify-center group-hover:scale-105 transition-transform shadow-glow-sm">
-          <svg class="w-5 h-5 text-brand-accent" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-          </svg>
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="text-xl font-extrabold tracking-tight text-white">CalcuFit</span>
-            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-brand-card text-brand-teal border border-brand-border">Hybrid OS</span>
-          </div>
-          <p class="text-[11px] text-brand-muted tracking-tight font-medium">Daily BMI Assessment &amp; Body Weight Tracker</p>
-        </div>
-      </a>
+      <main class="content">
+        <section class="hero" id="features">
+          <div class="container hero-grid">
+            <div>
+              <div class="eyebrow"><span class="dot"></span> Technical Specification &amp; Product Showcase</div>
+              <h1>Sleek, offline daily BMI assessment <span class="gradient-text">&amp; weight tracking.</span></h1>
+              <p class="lead">
+                Engineered with MIT App Inventor block logic and a chromium-based local WebViewer, CalcuFit keeps everything on-device and fast for everyday BMI tracking, profile inputs, and body health insights.
+              </p>
 
-      <!-- Quick Links -->
-      <nav class="hidden xl:flex items-center gap-7 text-sm font-medium text-slate-300">
-        <a href="#features" class="hover:text-brand-accent transition">Capabilities</a>
-        <a href="#architecture" class="hover:text-brand-accent transition">Architecture</a>
-        <a href="#simulator" class="hover:text-brand-accent transition">Interactive Mockup</a>
-        <a href="#matrix" class="hover:text-brand-accent transition">Clinical Ranges</a>
-      </nav>
-
-      <!-- Primary Action: Open TRD Modal -->
-      <div class="flex items-center gap-3">
-        <button onclick="openTrdModal()" class="hidden xl:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border hover:border-brand-accent/50 text-slate-100 text-xs sm:text-sm font-semibold transition group shadow-card">
-          <svg class="w-4 h-4 text-brand-accent group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          <span>Open TRD Spec</span>
-        </button>
-
-        <a href="#simulator" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-brand-void text-xs sm:text-sm font-extrabold shadow-glow-sm transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Try Live Demo
-        </a>
-        <a href="calcufit.apk" download="CalcuFit.apk" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-accent/40 hover:border-brand-accent text-brand-accent text-xs sm:text-sm font-extrabold transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v12m0 0l-4-4m4 4l4-4M5 17v3h14v-3"/></svg>
-          Download APK
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- ======================================================== -->
-  <!-- 3. HERO & PHONE SIMULATOR SECTION                        -->
-  <!-- ======================================================== -->
-  <main class="flex-grow">
-    <section class="relative overflow-hidden py-12 md:py-20 lg:py-24 border-b border-brand-border">
-      <!-- Glow background -->
-      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-brand-accent/10 rounded-full blur-[130px] pointer-events-none -z-10"></div>
-
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
-          <!-- Hero Copy Left (7 cols) -->
-          <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-card border border-brand-border text-xs font-semibold text-brand-muted">
-              <span class="w-2 h-2 rounded-full bg-brand-accent"></span>
-              Technical Specification &amp; Product Showcase
-            </div>
-
-            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12]">
-              Sleek, offline daily BMI assessment <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-teal-300 to-cyan-400">&amp; weight tracking.</span>
-            </h1>
-
-            <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              Engineered with <strong class="text-white font-semibold">MIT App Inventor</strong> block logic and an integrated, hardware-accelerated <strong class="text-white font-semibold">Chromium HTML/CSS dashboard</strong>. Now supporting dynamic gender demographics, age steppers, multi-tone severity theming, and real-time SVG circular gauges with zero server dependency.
-            </p>
-
-            <!-- Project Authorship Badge -->
-            <div class="p-4 rounded-xl bg-brand-card/90 border border-brand-border max-w-lg mx-auto lg:mx-0 flex flex-col sm:flex-row items-center sm:items-start gap-3.5 text-left">
-              <div class="w-10 h-10 rounded-xl bg-brand-accent/10 border border-brand-accent/25 flex items-center justify-center text-brand-accent flex-shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-              </div>
-              <div class="text-xs space-y-0.5">
-                <div class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Project Credits &amp; Engineering</div>
-                <div class="text-white font-bold text-sm">Lead Developer: <span class="text-brand-accent">Johnrey Camacho</span></div>
-                <div class="text-slate-300">IT Consultant: <span class="text-teal-400 font-medium">Dr. Erick R. Abuzo, IT Consultant</span></div>
-              </div>
-            </div>
-
-            <!-- Quick Specs Row -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 max-w-lg mx-auto lg:mx-0 text-left">
-              <div class="p-3.5 rounded-xl bg-brand-card/80 border border-brand-border">
-                <div class="text-[11px] text-brand-muted font-semibold uppercase tracking-wider">Network Dependency</div>
-                <div class="text-sm font-bold text-brand-accent mt-0.5 flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 4.243a9 9 0 01-12.728 0m0 0l2.829-2.829m-2.829 2.829L3 21m2.829-15.536a5 5 0 017.072 0m0 0l2.829 2.829"/></svg>
-                  0% Offline
+              <div class="author-box">
+                <div class="author-icon">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                    <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm-8 9a4 4 0 0 1 8 0" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 19c1.2-2 3.2-3 6.3-3" stroke-linecap="round"/>
+                    <path d="M19.6 19c-.4-1.1-1.6-2.3-3.6-2.9" stroke-linecap="round"/>
+                  </svg>
                 </div>
-              </div>
-              <div class="p-3.5 rounded-xl bg-brand-card/80 border border-brand-border">
-                <div class="text-[11px] text-brand-muted font-semibold uppercase tracking-wider">IPC Latency</div>
-                <div class="text-sm font-bold text-white mt-0.5 font-mono flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-brand-teal"></span> &lt; 50 ms
-                </div>
-              </div>
-              <div class="col-span-2 sm:col-span-1 p-3.5 rounded-xl bg-brand-card/80 border border-brand-border">
-                <div class="text-[11px] text-brand-muted font-semibold uppercase tracking-wider">UI Engine</div>
-                <div class="text-sm font-bold text-cyan-400 mt-0.5">Vector SVG 360°</div>
-              </div>
-            </div>
-
-            <!-- CTA Actions -->
-            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
-              <button onclick="openTrdModal('sec-exec')" class="px-6 py-3.5 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-brand-void font-extrabold text-sm transition-all shadow-glow flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                Read Technical Requirements
-              </button>
-              <a href="#simulator" class="px-6 py-3.5 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border text-slate-200 font-bold text-sm transition flex items-center gap-2">
-                <span>Interact with Mockup</span>
-                <svg class="w-4 h-4 text-brand-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- Hero Phone Simulator Right (5 cols) -->
-          <div id="simulator" class="lg:col-span-5 flex justify-center">
-            <!-- Realistic Phone Chassis -->
-            <div class="w-[340px] sm:w-[360px] bg-[#03070B] p-3 rounded-[46px] shadow-2xl border-[4px] border-[#2A374A] ring-1 ring-white/10 relative">
-              <!-- Top Speaker / Notch Area -->
-              <div class="absolute top-6 left-1/2 -translate-x-1/2 w-28 h-4 bg-black rounded-full z-20 flex items-center justify-center">
-                <div class="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-800 ml-auto mr-3"></div>
-              </div>
-
-              <!-- Phone Screen Content (CalcuFit Exact UI matching user image & code) -->
-              <div class="bg-[#0b111a] rounded-[36px] overflow-hidden pt-8 pb-5 px-4 sm:px-5 border border-brand-border/80 flex flex-col justify-between min-h-[690px] text-white">
-                
                 <div>
-                  <!-- 1. Top Bar -->
-                  <div class="flex items-center justify-between mt-1">
-                    <div class="flex items-center gap-2.5">
-                      <div class="w-8 h-8 rounded-lg bg-[#0F3D32] flex items-center justify-center text-brand-accent shadow-sm">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
+                  <small>Project Credits &amp; Engineering</small>
+                  <div><strong>Lead Developer:</strong> <span>Johnrey Camacho</span></div>
+                  <div><strong>IT Consultant:</strong> <span>Dr. Erick R. Abuzo</span></div>
+                </div>
+              </div>
+
+              <div class="stats">
+                <div class="stat">
+                  <span class="stat-label">Network Dependency</span>
+                  <strong>0% Offline</strong>
+                </div>
+                <div class="stat">
+                  <span class="stat-label">IPC Latency</span>
+                  <strong>&lt; 50 ms</strong>
+                </div>
+                <div class="stat">
+                  <span class="stat-label">UI Engine</span>
+                  <strong>SVG 360°</strong>
+                </div>
+              </div>
+
+              <div class="hero-actions">
+                <a href="#simulator" class="btn btn-primary">Read Technical Requirements</a>
+                <a href="#simulator" class="btn btn-secondary">Interact with Mockup</a>
+              </div>
+            </div>
+
+            <div id="simulator" class="phone-panel">
+              <div class="phone-shell">
+                <div class="notch"></div>
+                <div class="screen">
+                  <div class="screen-header">
+                    <div class="brand-mini">
+                      <div class="mini-icon">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 21.35 10.55 20.03C5.4 15.36 2 12.28 2 8.5A4.5 4.5 0 0 1 6.5 4c1.74 0 3.41.81 4.5 2.09A6.21 6.21 0 0 1 15.5 4 4.5 4.5 0 0 1 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35Z"/></svg>
                       </div>
-                      <span class="font-bold text-white text-lg tracking-tight">CalcuFit</span>
+                      <span>CalcuFit</span>
                     </div>
-                    <span class="text-[10px] font-bold text-slate-400 bg-[#141c28] border border-[#222e40] px-2.5 py-1 rounded-full">Offline</span>
+                    <span class="status-pill">Offline</span>
                   </div>
 
-                  <!-- 2. Gender and Age Grid (NEW APP FEATURE) -->
-                  <div class="grid grid-cols-2 gap-2 mt-3">
-                    <!-- Gender Selector -->
-                    <div class="flex bg-[#121924] border border-[#1c2738] rounded-xl p-0.5 gap-1">
-                      <button type="button" id="sim-btn-male" onclick="simSetGender('Male')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 bg-[#1e293b] text-[#00d29d] border border-[#2e3e55]">
-                        ♂ Male
-                      </button>
-                      <button type="button" id="sim-btn-female" onclick="simSetGender('Female')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 text-[#6c7c93] hover:text-white">
-                        ♀ Female
-                      </button>
+                  <div class="selector-grid">
+                    <div class="selector">
+                      <div class="selector-row">
+                        <button type="button" class="active">♂ Male</button>
+                        <button type="button">♀ Female</button>
+                      </div>
                     </div>
-
-                    <!-- Age Input Stepper -->
-                    <div class="bg-[#121924] border border-[#1c2738] rounded-xl flex items-center justify-between px-2.5 py-1">
-                      <span class="text-[11px] font-bold text-[#6c7c93]">Age</span>
-                      <div class="flex items-center gap-1.5">
-                        <button type="button" onclick="simAdjustAge(-1)" class="w-6 h-6 rounded-md bg-[#182333] border border-[#2a374a] text-white font-bold text-xs flex items-center justify-center active:bg-[#223247]">−</button>
-                        <span id="sim-disp-age" class="text-xs font-bold text-white min-w-[20px] text-center">25</span>
-                        <button type="button" onclick="simAdjustAge(1)" class="w-6 h-6 rounded-md bg-[#182333] border border-[#2a374a] text-white font-bold text-xs flex items-center justify-center active:bg-[#223247]">+</button>
+                    <div class="age-box">
+                      <label>Age</label>
+                      <div class="age-controls">
+                        <button class="stepper" type="button">−</button>
+                        <strong style="font-size: 0.7rem; color: #f8fafc;">25</strong>
+                        <button class="stepper" type="button">+</button>
                       </div>
                     </div>
                   </div>
 
-                  <!-- 3. Circular SVG Meter Section -->
-                  <div class="relative w-48 h-48 mx-auto my-3 flex items-center justify-center">
-                    <svg class="w-full h-full -rotate-90" viewBox="0 0 200 200">
+                  <div class="gauge-wrap">
+                    <svg viewBox="0 0 200 200" aria-hidden="true">
+                      <circle cx="100" cy="100" r="90" fill="none" stroke="#182333" stroke-width="14"/>
+                      <circle cx="100" cy="100" r="90" fill="none" stroke="url(#gaugeGradient)" stroke-width="14" stroke-linecap="round" stroke-dasharray="565.48" stroke-dashoffset="254.46"/>
                       <defs>
-                        <linearGradient id="sim-meter-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop id="sim-grad-stop1" offset="0%" stop-color="#00D29D" />
-                          <stop id="sim-grad-stop2" offset="100%" stop-color="#14B8A6" />
+                        <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#00D29D"/>
+                          <stop offset="100%" stop-color="#14B8A6"/>
                         </linearGradient>
                       </defs>
-                      <circle cx="100" cy="100" r="90" fill="none" stroke="#182333" stroke-width="14" />
-                      <circle id="sim-progress-circle" class="meter-stroke-progress" cx="100" cy="100" r="90" fill="none" stroke="url(#sim-meter-gradient)" stroke-width="14" stroke-linecap="round" />
                     </svg>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                      <span class="text-[10px] font-semibold text-[#7b8ea5] tracking-wider uppercase">Your BMI</span>
-                      <span id="sim-bmi-val" class="text-4xl font-extrabold text-white my-0.5 tracking-tight">22.4</span>
-                      <span id="sim-bmi-badge" class="text-[11px] font-bold px-3 py-0.5 rounded-full bg-[rgba(0,210,157,0.12)] text-[#00d29d] transition-colors">Normal Weight</span>
+                    <div class="gauge-center">
+                      <small>Your BMI</small>
+                      <strong>22.4</strong>
+                      <span class="gauge-tag">Normal Weight</span>
                     </div>
                   </div>
 
-                  <!-- 4. Stat Cards Grid -->
-                  <div class="grid grid-cols-2 gap-2 mt-2">
-                    <div class="bg-[#121924] border border-[#1c2738] rounded-xl p-3">
-                      <div class="text-[10px] font-semibold text-[#68798e]">Healthy Range</div>
-                      <div id="sim-range-val" class="text-xs font-bold text-white mt-0.5">56.7 – 76.3 kg</div>
+                  <div class="mini-cards">
+                    <div class="mini-card">
+                      <small>Healthy Range</small>
+                      <strong>56.7 – 76.3 kg</strong>
                     </div>
-                    <div class="bg-[#121924] border border-[#1c2738] rounded-xl p-3">
-                      <div class="text-[10px] font-semibold text-[#68798e]">Prime Status</div>
-                      <div id="sim-prime-val" class="text-xs font-bold text-[#14b8a6] mt-0.5 transition-colors">Optimal Zone</div>
+                    <div class="mini-card">
+                      <small>Prime Status</small>
+                      <strong style="color: #14b8a6;">Optimal Zone</strong>
                     </div>
                   </div>
 
-                  <!-- 5. Details & Profile Card -->
-                  <div class="bg-[#121924] border border-[#1c2738] rounded-xl p-3 mt-2 space-y-2">
-                    <div class="flex items-center justify-between text-xs">
-                      <span class="text-[#68798e] font-semibold">Height</span>
-                      <div class="flex items-center gap-1">
-                        <input id="sim-input-height" type="number" value="175" step="0.5" class="w-16 bg-[#0b111a] text-right font-bold text-white rounded-md px-1.5 py-0.5 border border-[#1f2d40] focus:border-[#00d29d] focus:outline-none text-xs">
-                        <span class="text-white font-bold text-xs">cm</span>
-                      </div>
+                  <div class="profile-panel">
+                    <div class="profile-row">
+                      <span>Height</span>
+                      <strong>175 cm</strong>
                     </div>
-                    <div class="flex items-center justify-between text-xs">
-                      <span class="text-[#68798e] font-semibold">Weight</span>
-                      <div class="flex items-center gap-1">
-                        <input id="sim-input-weight" type="number" value="68.5" step="0.5" class="w-16 bg-[#0b111a] text-right font-bold text-white rounded-md px-1.5 py-0.5 border border-[#1f2d40] focus:border-[#00d29d] focus:outline-none text-xs">
-                        <span class="text-white font-bold text-xs">kg</span>
-                      </div>
+                    <div class="profile-row">
+                      <span>Weight</span>
+                      <strong>68.5 kg</strong>
                     </div>
-                    <div class="flex items-center justify-between text-xs pt-1 border-t border-[#1c2738]/60">
-                      <span class="text-[#68798e] font-semibold">Profile</span>
-                      <span id="sim-stat-profile" class="text-white font-bold text-xs">Male, 25 yrs</span>
+                    <div class="profile-row">
+                      <span>Profile</span>
+                      <strong>Male, 25 yrs</strong>
                     </div>
                   </div>
+
+                  <button type="button" class="screen-action">Recalculate</button>
                 </div>
-
-                <!-- 6. Bottom Recalculate Button -->
-                <button id="sim-btn-recalc" onclick="simulateRecalculate()" class="w-full mt-3 py-3 rounded-xl bg-[#00d29d] hover:bg-[#00b889] text-[#05241b] font-extrabold text-xs tracking-wider flex items-center justify-center gap-2 shadow-glow-sm transition active:scale-95">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                  RECALCULATE
-                </button>
               </div>
             </div>
           </div>
+        </section>
 
-        </div>
-      </div>
-    </section>
+        <section class="section" id="gallery">
+          <div class="container">
+            <div class="section-head">
+              <span class="eyebrow" style="padding-inline: 0.8rem;">CalcuFit on Google Play</span>
+              <h2>App screenshots</h2>
+            </div>
 
-    <!-- ======================================================== -->
-    <!-- 4. APP SCREENSHOTS & STORE FEATURE GRAPHIC               -->
-    <!-- ======================================================== -->
-    <section id="app-gallery" class="py-16 md:py-20 border-b border-brand-border">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+            <div class="gallery">
+              <figure class="gallery-card">
+                <img src="screenshot-body-overview.jpg" alt="CalcuFit app overview" />
+                <figcaption>Know your body</figcaption>
+              </figure>
+              <figure class="gallery-card">
+                <img src="screenshot-bmi-partner.jpg" alt="CalcuFit BMI partner view" />
+                <figcaption>Your BMI partner</figcaption>
+              </figure>
+              <figure class="gallery-card">
+                <img src="screenshot-bmi-calculator.jpg" alt="CalcuFit BMI calculator" />
+                <figcaption>Calculate your BMI</figcaption>
+              </figure>
+            </div>
+
+            <div class="video-wrap">
+              <video controls preload="metadata" playsinline poster="feature-graphic.jpg">
+                <source src="calcufit-showcase.mp4" type="video/mp4" />
+                Your browser does not support HTML video.
+              </video>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="container footer-inner">
           <div>
-            <span class="text-xs font-bold text-brand-accent uppercase tracking-widest">CalcuFit on Google Play</span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">App screenshots</h2>
-            <p class="text-sm text-brand-muted mt-2">A closer look at your offline BMI dashboard and daily health metrics.</p>
+            <strong>CalcuFit Project System Specification</strong>
           </div>
-          <span class="self-start sm:self-auto inline-flex items-center gap-2 rounded-full border border-brand-border bg-brand-card px-3 py-1.5 text-xs font-semibold text-slate-300">
-            <span class="h-2 w-2 rounded-full bg-brand-accent"></span>
-            Offline BMI tracker
-          </span>
-        </div>
-
-        <div class="app-gallery-track flex gap-5 overflow-x-auto pb-5 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:pb-0">
-          <figure class="app-gallery-item w-[72vw] max-w-[280px] flex-none overflow-hidden rounded-2xl border border-brand-border bg-brand-card shadow-xl sm:w-full sm:max-w-none">
-            <img src="screenshot-body-overview.jpg" alt="CalcuFit dashboard showing a normal BMI and body profile" class="block h-auto w-full" loading="lazy">
-            <figcaption class="border-t border-brand-border px-4 py-3 text-sm font-semibold text-slate-200">Know your body</figcaption>
-          </figure>
-
-          <figure class="app-gallery-item w-[72vw] max-w-[280px] flex-none overflow-hidden rounded-2xl border border-brand-border bg-brand-card shadow-xl sm:w-full sm:max-w-none">
-            <img src="screenshot-bmi-partner.jpg" alt="CalcuFit BMI dashboard with a healthy-range and profile summary" class="block h-auto w-full" loading="lazy">
-            <figcaption class="border-t border-brand-border px-4 py-3 text-sm font-semibold text-slate-200">Your BMI partner</figcaption>
-          </figure>
-
-          <figure class="app-gallery-item w-[72vw] max-w-[280px] flex-none overflow-hidden rounded-2xl border border-brand-border bg-brand-card shadow-xl sm:w-full sm:max-w-none">
-            <img src="screenshot-bmi-calculator.jpg" alt="CalcuFit BMI calculator showing an obesity result and high-risk status" class="block h-auto w-full" loading="lazy">
-            <figcaption class="border-t border-brand-border px-4 py-3 text-sm font-semibold text-slate-200">Calculate your BMI</figcaption>
-          </figure>
-        </div>
-
-        <div class="mt-10">
-          <div class="mb-5">
-            <h3 class="text-lg sm:text-xl font-bold text-white">See CalcuFit in action</h3>
-            <p class="text-sm text-brand-muted mt-1">Watch a quick walkthrough of the app interface.</p>
-          </div>
-          <video id="showcase-video" class="block w-full max-w-4xl mx-auto rounded-2xl border border-brand-border bg-black shadow-2xl" controls preload="metadata" playsinline poster="assets/app-gallery/feature-graphic.jpg" aria-label="CalcuFit app showcase video">
-            <source src="calcufit-showcase.mp4" type="video/mp4">
-            Your browser does not support HTML video. Please use a modern browser to watch the CalcuFit showcase.
-          </video>
-          <audio id="showcase-soundtrack" preload="auto" hidden>
-            <source src="showcase-soundtrack.wav" type="audio/wav">
-          </audio>
-          <div class="max-w-4xl mx-auto mt-3 flex flex-wrap items-center gap-3 text-xs text-brand-muted">
-            <p id="showcase-audio-status" aria-live="polite">An original instrumental soundtrack plays with the video.</p>
-            <button id="showcase-enable-sound" type="button" hidden class="rounded-lg border border-brand-accent/40 px-3 py-1.5 font-semibold text-brand-accent hover:bg-brand-accent/10 transition">
-              Enable soundtrack
-            </button>
+          <div class="footer-links">
+            <a href="app-description.html">App description</a>
+            <a href="privacy-policy.html">Privacy policy</a>
+            <a href="calcufit%20.apk" download="CalcuFit.apk">Download APK</a>
           </div>
         </div>
-
-        <div class="mt-12 md:mt-16">
-          <div class="mb-5">
-            <h3 class="text-lg sm:text-xl font-bold text-white">Google Play feature graphic</h3>
-            <p class="text-sm text-brand-muted mt-1">CalcuFit: Live smart. Know your body.</p>
-          </div>
-          <figure class="overflow-hidden rounded-2xl border border-brand-border bg-brand-card shadow-2xl shadow-brand-accent/10">
-            <img src="feature-graphic.jpg" alt="CalcuFit Google Play feature graphic with two app screens and the message Live Smart. Know Your Body." class="block h-auto w-full" loading="lazy">
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================================================== -->
-    <!-- 5. ARCHITECTURE HIGHLIGHT SECTION                         -->
-    <!-- ======================================================== -->
-    <section id="architecture" class="py-16 bg-brand-bg border-b border-brand-border">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-14">
-          <span class="text-xs font-bold text-brand-accent uppercase tracking-widest">Engineering Blueprint</span>
-          <h2 class="text-2xl sm:text-4xl font-extrabold text-white mt-2">Hybrid APK Subsystem Interaction</h2>
-          <p class="text-sm sm:text-base text-slate-300 mt-3">How App Inventor native event blocks communicate bidirectionally with the hardware-accelerated WebViewer dashboard without internet.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Card 1 -->
-          <div class="bg-brand-card p-6 rounded-2xl border border-brand-border flex flex-col justify-between">
-            <div>
-              <div class="w-10 h-10 rounded-xl bg-purple-900/30 text-purple-400 flex items-center justify-center border border-purple-500/20 mb-4 font-mono font-bold text-sm">
-                01
-              </div>
-              <h3 class="text-lg font-bold text-white">App Inventor Block Core</h3>
-              <p class="text-xs text-brand-muted mt-2 leading-relaxed">
-                Executes Quetelet math: <code class="text-brand-accent font-mono text-[11px] font-semibold">BMI = Weight / (Height/100)²</code>. Formats decimal precision and determines clinical tier classification within native memory.
-              </p>
-            </div>
-            <div class="mt-6 pt-4 border-t border-brand-border/60 text-[11px] font-mono text-slate-400">
-              Role: Business Logic &amp; TinyDB Persistence
-            </div>
-          </div>
-
-          <!-- Card 2 -->
-          <div class="bg-brand-card p-6 rounded-2xl border border-brand-border flex flex-col justify-between relative overflow-hidden">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-brand-accent/5 rounded-full pointer-events-none"></div>
-            <div>
-              <div class="w-10 h-10 rounded-xl bg-brand-accent/10 text-brand-accent flex items-center justify-center border border-brand-accent/20 mb-4 font-mono font-bold text-sm">
-                02
-              </div>
-              <h3 class="text-lg font-bold text-white">WebViewString IPC Pipe</h3>
-              <p class="text-xs text-brand-muted mt-2 leading-relaxed">
-                Bi-directional inter-process string protocol. App Inventor pushes pipe-delimited data packets (<code class="text-brand-teal font-mono text-[11px]">bmi|status|range|prime|h|w|gauge</code>) into the web DOM every tick.
-              </p>
-            </div>
-            <div class="mt-6 pt-4 border-t border-brand-border/60 text-[11px] font-mono text-slate-400">
-              Role: Zero-overhead Local Messaging
-            </div>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="bg-brand-card p-6 rounded-2xl border border-brand-border flex flex-col justify-between">
-            <div>
-              <div class="w-10 h-10 rounded-xl bg-teal-900/30 text-teal-400 flex items-center justify-center border border-teal-500/20 mb-4 font-mono font-bold text-sm">
-                03
-              </div>
-              <h3 class="text-lg font-bold text-white">Chromium SVG Presentation</h3>
-              <p class="text-xs text-brand-muted mt-2 leading-relaxed">
-                Hardware-accelerated CSS and SVG stroke-dashoffset transitions provide 60 FPS animations. Tapping UI buttons returns signals like <code class="text-brand-accent font-mono text-[11px]">btn_clicked</code> to the App Inventor event loop.
-              </p>
-            </div>
-            <div class="mt-6 pt-4 border-t border-brand-border/60 text-[11px] font-mono text-slate-400">
-              Role: Vector Dark-Themed UI Rendering
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-10 text-center">
-          <button onclick="openTrdModal('sec-arch')" class="inline-flex items-center gap-2 text-xs font-bold text-brand-accent hover:underline">
-            <span>Inspect full System Architectural Flowchart in TRD</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================================================== -->
-    <!-- 6. CLINICAL VALIDATION MATRIX TABLE                       -->
-    <!-- ======================================================== -->
-    <section id="matrix" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-10">
-        <h2 class="text-xl sm:text-3xl font-extrabold text-white">WHO Clinical Metric Tiers</h2>
-        <p class="text-xs sm:text-sm text-brand-muted mt-2">World Health Organization BMI thresholds mapped directly into CalcuFit's state engine and radial progress meter.</p>
-      </div>
-
-      <div class="overflow-x-auto rounded-2xl border border-brand-border bg-brand-card">
-        <table class="w-full text-left border-collapse text-xs sm:text-sm">
-          <thead>
-            <tr class="border-b border-brand-border bg-brand-bg/60 text-brand-muted font-mono uppercase text-[11px]">
-              <th class="p-4">Classification</th>
-              <th class="p-4">BMI Interval</th>
-              <th class="p-4">Prime Status Tag</th>
-              <th class="p-4">Radial Meter Arc</th>
-              <th class="p-4">Color Palette</th>
-              <th class="p-4">Clinical Health Assessment</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-brand-border/50 font-medium">
-            <tr class="hover:bg-brand-bg/40 transition">
-              <td class="p-4 font-bold text-sky-400">Underweight</td>
-              <td class="p-4 font-mono">&lt; 18.5</td>
-              <td class="p-4"><span class="px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 text-xs">Low Zone</span></td>
-              <td class="p-4 font-mono text-slate-300">25% (offset: 424px)</td>
-              <td class="p-4 font-mono text-sky-400">#38bdf8</td>
-              <td class="p-4 text-brand-muted text-xs">Elevated risk for nutritional deficiency &amp; osteopenia.</td>
-            </tr>
-            <tr class="bg-brand-accent/5 hover:bg-brand-accent/10 transition">
-              <td class="p-4 font-bold text-brand-accent">Normal Weight</td>
-              <td class="p-4 font-mono">18.5 – 24.9</td>
-              <td class="p-4"><span class="px-2 py-0.5 rounded bg-brand-accent/15 text-brand-accent text-xs font-bold">Optimal Zone</span></td>
-              <td class="p-4 font-mono text-brand-accent">55% (offset: 254px)</td>
-              <td class="p-4 font-mono text-brand-accent">#00D29D / #14B8A6</td>
-              <td class="p-4 text-slate-200 text-xs">Lowest statistical risk for cardiovascular diseases.</td>
-            </tr>
-            <tr class="hover:bg-brand-bg/40 transition">
-              <td class="p-4 font-bold text-yellow-400">Overweight</td>
-              <td class="p-4 font-mono">25.0 – 29.9</td>
-              <td class="p-4"><span class="px-2 py-0.5 rounded bg-yellow-500/10 text-yellow-400 text-xs">Warning Zone</span></td>
-              <td class="p-4 font-mono text-slate-300">75% (offset: 141px)</td>
-              <td class="p-4 font-mono text-yellow-400">#facc15</td>
-              <td class="p-4 text-brand-muted text-xs">Increased strain on cardiovascular and metabolic systems.</td>
-            </tr>
-            <tr class="hover:bg-brand-bg/40 transition">
-              <td class="p-4 font-bold text-rose-500">Obesity (Class I+)</td>
-              <td class="p-4 font-mono">≥ 30.0</td>
-              <td class="p-4"><span class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-500 text-xs">High Risk</span></td>
-              <td class="p-4 font-mono text-slate-300">95% (offset: 28px)</td>
-              <td class="p-4 font-mono text-rose-500">#ef4444</td>
-              <td class="p-4 text-brand-muted text-xs">High risk of hypertension, type-2 diabetes, and sleep apnea.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
-
-  <!-- ======================================================== -->
-  <!-- 6. FOOTER                                                -->
-  <!-- ======================================================== -->
-  <footer class="border-t border-brand-border bg-brand-bg py-10 text-xs text-brand-muted">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
-        <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-brand-accent"></span>
-          <span class="font-bold text-white">CalcuFit Project System Specification</span>
-        </div>
-        <span class="hidden sm:inline text-brand-border">|</span>
-        <span>Lead: <strong class="text-slate-300">Johnrey Camacho</strong></span>
-        <span class="hidden sm:inline text-brand-border">•</span>
-        <span>Consultant: <strong class="text-slate-300">Dr. Erick R. Abuzo</strong></span>
-      </div>
-      <div class="flex items-center gap-6">
-        <a href="app-description.html" class="hover:text-brand-accent transition">App description</a>
-        <a href="privacy-policy.html" class="hover:text-brand-accent transition">Privacy policy</a>
-        <button onclick="openTrdModal()" class="hover:text-brand-accent transition">Technical Requirement Document</button>
-        <button onclick="window.print()" class="hover:text-brand-accent transition">Print TRD</button>
-        <a href="#simulator" class="hover:text-brand-accent transition">Interactive Testbed</a>
-      </div>
+      </footer>
     </div>
-  </footer>
-
-  <!-- ======================================================== -->
-  <!-- 7. POPUP MODAL: TECHNICAL REQUIREMENT DOCUMENT (TRD)     -->
-  <!-- ======================================================== -->
-  <div id="trd-modal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="trd-modal-title">
-    
-    <!-- Modal Window Chassis -->
-    <div class="modal-container w-full max-w-5xl bg-brand-bg border border-brand-border rounded-2xl shadow-modal overflow-hidden flex flex-col max-h-[92vh]">
-      
-      <!-- Modal Top Header Bar -->
-      <div class="px-5 py-4 border-b border-brand-border bg-brand-card/90 flex items-center justify-between flex-shrink-0">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-brand-darkAccent text-brand-accent flex items-center justify-center border border-brand-accent/20">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          </div>
-          <div>
-            <h2 id="trd-modal-title" class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-              CalcuFit System TRD
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brand-accent/15 text-brand-accent border border-brand-accent/30 font-semibold">CONFIDENTIAL - ENGINEERING SPEC</span>
-            </h2>
-            <p class="text-[11px] text-brand-muted">Doc ID: TRD-CALCUFIT-2026.04 • Target: MIT App Inventor Android Hybrid Engine</p>
-          </div>
-        </div>
-
-        <!-- Quick Controls -->
-        <div class="flex items-center gap-2">
-          <button onclick="window.print()" title="Print TRD" class="hidden sm:inline-flex p-2 rounded-lg bg-brand-border/40 hover:bg-brand-border text-slate-300 hover:text-white transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-          </button>
-          <button onclick="closeTrdModal()" class="p-2 rounded-lg bg-brand-border/40 hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 transition" aria-label="Close modal">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Navigation Tabs Inside Modal -->
-      <div class="px-5 py-2.5 bg-brand-card/40 border-b border-brand-border/70 flex items-center gap-2 overflow-x-auto text-xs font-semibold text-brand-muted flex-shrink-0">
-        <button onclick="switchTab('tab-all')" id="tab-btn-all" class="px-3 py-1.5 rounded-lg bg-brand-accent/20 text-brand-accent transition">Full Specification</button>
-        <button onclick="switchTab('tab-team')" id="tab-btn-team" class="px-3 py-1.5 rounded-lg hover:bg-brand-border text-slate-300 transition">Authorship &amp; Advisory</button>
-        <button onclick="switchTab('tab-arch')" id="tab-btn-arch" class="px-3 py-1.5 rounded-lg hover:bg-brand-border text-slate-300 transition">Architecture &amp; IPC</button>
-        <button onclick="switchTab('tab-func')" id="tab-btn-func" class="px-3 py-1.5 rounded-lg hover:bg-brand-border text-slate-300 transition">Functional Formulas</button>
-        <button onclick="switchTab('tab-nonfunc')" id="tab-btn-nonfunc" class="px-3 py-1.5 rounded-lg hover:bg-brand-border text-slate-300 transition">Non-Functional &amp; Offline</button>
-        <button onclick="switchTab('tab-matrix')" id="tab-btn-matrix" class="px-3 py-1.5 rounded-lg hover:bg-brand-border text-slate-300 transition">QA Matrix</button>
-      </div>
-
-      <!-- Modal Scrollable Content Area -->
-      <div id="trd-content-scroll" class="p-6 sm:p-8 overflow-y-auto space-y-12 text-slate-200 text-xs sm:text-sm leading-relaxed font-normal">
-
-        <!-- ========================================== -->
-        <!-- SECTION 1: EXECUTIVE SUMMARY & PURPOSE     -->
-        <!-- ========================================== -->
-        <section id="sec-exec" class="trd-section space-y-3">
-          <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
-            <span>[ Section 01 ]</span>
-            <div class="h-px bg-brand-border flex-grow"></div>
-          </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white">1. Executive Summary &amp; Core Purpose</h3>
-          
-          <p>
-            <strong>CalcuFit</strong> is a standalone, client-side Android application designed for high-precision daily Body Mass Index (BMI) assessment, demographic tracking (Gender, Age), and healthy weight management. The system pairs the visual sophistication of modern web dashboards with the zero-dependency simplicity of <strong>MIT App Inventor 2</strong>.
-          </p>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1.5">
-              <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-brand-accent"></span> Product Problem Statement
-              </span>
-              <p class="text-xs text-brand-muted">
-                Standard App Inventor components lack native support for CSS corner radiuses, dynamic multi-color SVG circular arc meters, interactive button-group pills, and smooth severity transitions without brittle external extensions (.aix).
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1.5">
-              <span class="text-xs font-bold text-brand-accent flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-brand-teal"></span> Engineered Architectural Solution
-              </span>
-              <p class="text-xs text-brand-muted">
-                Decoupled architecture: MIT App Inventor operates as the pure backend controller (executing formulas, managing memory, and triggering modal dialogs), while a sandboxed Chromium WebViewer renders the vector presentation layer via local file loading.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- SECTION 1B: AUTHORSHIP & ADVISORY TEAM     -->
-        <!-- ========================================== -->
-        <section id="sec-team" class="trd-section space-y-4">
-          <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
-            <span>[ Section 01.B ]</span>
-            <div class="h-px bg-brand-border flex-grow"></div>
-          </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white">Project Authorship &amp; Advisory Credentials</h3>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-              <div class="text-[10px] uppercase font-bold text-brand-accent tracking-wider font-mono">Lead Author / Developer</div>
-              <div class="text-base font-extrabold text-white">Johnrey Camacho</div>
-              <p class="text-xs text-brand-muted leading-relaxed">
-                Architect and lead software engineer responsible for the CalcuFit mobile application layout, App Inventor block algorithms, SVG circular meter implementation, and inter-process communication protocol bridge.
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-              <div class="text-[10px] uppercase font-bold text-teal-400 tracking-wider font-mono">Technical Advisor / Consultant</div>
-              <div class="text-base font-extrabold text-white">Dr. Erick R. Abuzo</div>
-              <div class="text-xs font-semibold text-brand-teal">IT Consultant</div>
-              <p class="text-xs text-brand-muted leading-relaxed">
-                Project technical consultant providing oversight on mobile system design principles, offline-first data verification, clinical accuracy compliance, and overall software architecture quality assurance.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- SECTION 2: SYSTEM ARCHITECTURE & IPC       -->
-        <!-- ========================================== -->
-        <section id="sec-arch" class="trd-section space-y-4">
-          <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
-            <span>[ Section 02 ]</span>
-            <div class="h-px bg-brand-border flex-grow"></div>
-          </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white">2. System Architecture &amp; Local IPC Bridge</h3>
-
-          <p>
-            The software executes entirely within a single sandboxed Android APK process. The visual presentation resides in <code class="text-brand-accent font-mono">landingpage.html</code>, packaged within the application’s compiled Android assets folder.
-          </p>
-
-          <!-- ASCII Architectural Flowchart -->
-          <div class="bg-brand-void p-4 sm:p-5 rounded-xl border border-brand-border font-mono text-[11px] leading-snug overflow-x-auto text-emerald-400">
-+-----------------------------------------------------------------------------------+
-|                           ANDROID APPLICATION RUNTIME (.APK)                      |
-|                                                                                   |
-|  +------------------------------------+    WebViewString     +-----------------+  |
-|  |       MIT APP INVENTOR CORE        |    IPC Bridge        | CHROMIUM WEBVIEW|  |
-|  | - Screen1.Initialize               |                      | - landingpage   |  |
-|  | - Procedures (calculateAndSync)    | ===================> | - ♂/♀ Selector  |  |
-|  | - Notifier Dialog Controller       |   Pipe Delimited     | - Age Stepper   |  |
-|  | - TinyDB User Record Cache         |     Data Stream      | - Dynamic Theme |  |
-|  +------------------------------------+                      +-----------------+  |
-|                  ^                                                    |           |
-|                  |                WebViewStringChange                 |           |
-|                  +----------------------------------------------------+           |
-|                                "btn_clicked" Trigger                              |
-+-----------------------------------------------------------------------------------+
-          </div>
-
-          <h4 class="text-sm font-bold text-white pt-2">2.1 Asset Resolution Pipeline</h4>
-          <ul class="list-disc list-inside space-y-1 text-xs text-brand-muted">
-            <li><strong class="text-slate-200">Compiled Production APK:</strong> Loaded securely via internal sandboxed URI: <code class="text-brand-teal font-mono">http://localhost/landingpage.html</code>.</li>
-            <li><strong class="text-slate-200">AI Companion Development Environment:</strong> Routed via external sandbox directory: <code class="text-brand-teal font-mono">http://localhost/mnt/sdcard/AppInventor/assets/landingpage.html</code>.</li>
-          </ul>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- SECTION 3: FUNCTIONAL REQUIREMENTS        -->
-        <!-- ========================================== -->
-        <section id="sec-func" class="trd-section space-y-4">
-          <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
-            <span>[ Section 03 ]</span>
-            <div class="h-px bg-brand-border flex-grow"></div>
-          </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white">3. Functional Requirements &amp; Clinical Formulas</h3>
-
-          <!-- Formulas Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Formula 1 -->
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-              <span class="text-xs font-bold text-white flex items-center justify-between">
-                <span>Quetelet BMI Calculation Formula</span>
-                <span class="text-[10px] text-brand-accent font-mono">FR-01</span>
-              </span>
-              <div class="bg-brand-bg p-3 rounded-lg border border-brand-border font-mono text-xs text-brand-accent">
-                BMI = Weight_kg / (Height_m)²
-              </div>
-              <p class="text-xs text-brand-muted leading-relaxed">
-                Height is input in centimeters ($H_{\text{cm}}$), converted to meters ($H_{\text{m}} = H_{\text{cm}} / 100$), and evaluated to 1 decimal place using App Inventor’s <code class="text-slate-200">format as number(x, 1)</code> block.
-              </p>
-            </div>
-
-            <!-- Formula 2 -->
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-              <span class="text-xs font-bold text-white flex items-center justify-between">
-                <span>Healthy Weight Range Bounds</span>
-                <span class="text-[10px] text-brand-accent font-mono">FR-02</span>
-              </span>
-              <div class="bg-brand-bg p-3 rounded-lg border border-brand-border font-mono text-xs text-brand-teal">
-                W_min = 18.5 × (Height_m)²<br>
-                W_max = 24.9 × (Height_m)²
-              </div>
-              <p class="text-xs text-brand-muted leading-relaxed">
-                Dynamically computes ideal clinical bounds based solely on the user's specific stature, rendered as a unified string: <code class="text-slate-200">"{W_min} – {W_max} kg"</code>.
-              </p>
-            </div>
-          </div>
-
-          <!-- Demographics & Theme Features -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-              <span class="text-xs font-bold text-white flex items-center justify-between">
-                <span>Gender &amp; Age Demographics Capture</span>
-                <span class="text-[10px] text-brand-accent font-mono">FR-03</span>
-              </span>
-              <p class="text-xs text-brand-muted leading-relaxed">
-                Provides dedicated pill controls for gender toggling (Male/Female) and interactive stepper logic for age adjustment (range: 5 to 100 years), updating the persistent Profile summary row: <code class="text-slate-200 font-mono">"{Gender}, {Age} yrs"</code>.
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-              <span class="text-xs font-bold text-white flex items-center justify-between">
-                <span>Dynamic Severity Color-Theming Engine</span>
-                <span class="text-[10px] text-brand-accent font-mono">FR-04</span>
-              </span>
-              <p class="text-xs text-brand-muted leading-relaxed">
-                The visual theme dispatches dynamic hex color sets to SVG gradient stops (<code class="text-brand-accent font-mono">gradStop1</code>, <code class="text-brand-teal font-mono">gradStop2</code>), the BMI status badge, and the Prime Status tag based on the classification severity.
-              </p>
-            </div>
-          </div>
-
-          <!-- SVG Math Formula -->
-          <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-            <span class="text-xs font-bold text-white flex items-center justify-between">
-              <span>Vector Gauge Circumference &amp; Stroke Dash Offset Equation</span>
-              <span class="text-[10px] text-brand-accent font-mono">FR-05</span>
-            </span>
-            <div class="bg-brand-bg p-3 rounded-lg border border-brand-border font-mono text-xs text-cyan-300">
-              Circumference = 2 × π × 90 ≈ 565.487 px<br>
-              StrokeOffset = Circumference - (GaugePercent / 100) × Circumference
-            </div>
-            <p class="text-xs text-brand-muted leading-relaxed">
-              The SVG circle uses <code class="text-slate-200 font-mono">stroke-dasharray="565.48"</code>. Smooth CSS hardware-accelerated transitions dynamically interpolate <code class="text-slate-200 font-mono">stroke-dashoffset</code> across status updates.
-            </p>
-          </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- SECTION 4: DATA FLOW & IPC PROTOCOL        -->
-        <!-- ========================================== -->
-        <section id="sec-protocol" class="trd-section space-y-4">
-          <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
-            <span>[ Section 04 ]</span>
-            <div class="h-px bg-brand-border flex-grow"></div>
-          </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white">4. Data Flow &amp; Communication Protocol Schema</h3>
-
-          <p>
-            Data serialization between MIT App Inventor's block memory and the JavaScript engine avoids JSON overhead by leveraging a high-speed pipe-delimited packet structure.
-          </p>
-
-          <div class="bg-brand-void p-4 rounded-xl border border-brand-border space-y-2">
-            <div class="text-[11px] font-mono text-brand-muted uppercase tracking-wider">App Inventor → WebViewer Payload Schema</div>
-            <div class="font-mono text-xs text-brand-accent p-2.5 rounded bg-brand-bg border border-brand-border overflow-x-auto">
-              [BMI] | [StatusTag] | [HealthyRange] | [PrimeStatus] | [HeightCm] | [WeightKg] | [GaugePercentage]
-            </div>
-            <div class="text-[11px] font-mono text-slate-400">
-              Example Packet: <span class="text-slate-200">"22.4|Normal Weight|56.7 – 76.3 kg|Optimal Zone|175|68.5|55"</span>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs border border-brand-border rounded-lg overflow-hidden">
-              <thead class="bg-brand-card text-brand-muted font-mono uppercase text-[10px]">
-                <tr>
-                  <th class="p-3">Index</th>
-                  <th class="p-3">Field Name</th>
-                  <th class="p-3">Data Type</th>
-                  <th class="p-3">DOM Target ID</th>
-                  <th class="p-3">Sample Value</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-brand-border font-mono text-[11px] text-slate-300">
-                <tr><td class="p-3 text-brand-accent">0</td><td>BMI</td><td>Float (1 dec)</td><td>#bmiValue</td><td>22.4</td></tr>
-                <tr><td class="p-3 text-brand-accent">1</td><td>StatusTag</td><td>String</td><td>#bmiStatus</td><td>Normal Weight</td></tr>
-                <tr><td class="p-3 text-brand-accent">2</td><td>HealthyRange</td><td>String</td><td>#healthyRange</td><td>56.7 – 76.3 kg</td></tr>
-                <tr><td class="p-3 text-brand-accent">3</td><td>PrimeStatus</td><td>String</td><td>#primeStatus</td><td>Optimal Zone</td></tr>
-                <tr><td class="p-3 text-brand-accent">4</td><td>HeightCm</td><td>Float</td><td>#statHeight</td><td>175 cm</td></tr>
-                <tr><td class="p-3 text-brand-accent">5</td><td>WeightKg</td><td>Float</td><td>#statWeight</td><td>68.5 kg</td></tr>
-                <tr><td class="p-3 text-brand-accent">6</td><td>GaugePercent</td><td>Integer (0-100)</td><td>#progressCircle</td><td>55</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- SECTION 5: NON-FUNCTIONAL REQUIREMENTS     -->
-        <!-- ========================================== -->
-        <section id="sec-nonfunc" class="trd-section space-y-4">
-          <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
-            <span>[ Section 05 ]</span>
-            <div class="h-px bg-brand-border flex-grow"></div>
-          </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white">5. Non-Functional &amp; Operational Requirements</h3>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1">
-              <div class="font-bold text-white flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-brand-accent"></span> Zero-Network Autonomy (NFR-01)
-              </div>
-              <p class="text-brand-muted leading-relaxed">
-                App strictly operates without Wi-Fi or Cellular data. No remote analytic SDKs or telemetry beacons are injected, guaranteeing 100% HIPAA/GDPR health data privacy on-device.
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1">
-              <div class="font-bold text-white flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-brand-teal"></span> Sub-100ms Input-to-Render Latency (NFR-02)
-              </div>
-              <p class="text-brand-muted leading-relaxed">
-                Poll frequency of 150ms ensures that any user calculation dispatched from native App Inventor blocks renders on the DOM with an imperceptible perceptual delay (&lt; 85ms).
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1">
-              <div class="font-bold text-white flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Adaptive Mobile Viewports (NFR-03)
-              </div>
-              <p class="text-brand-muted leading-relaxed">
-                Supports fluid aspect ratios spanning 16:9 to 21:9 across standard 320px compact devices up to large 11-inch Android tablets with dynamic font scaling.
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1">
-              <div class="font-bold text-white flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-purple-400"></span> Persistent Memory State (NFR-04)
-              </div>
-              <p class="text-brand-muted leading-relaxed">
-                TinyDB cache holds the most recently evaluated parameters under tag <code class="text-slate-200 font-mono">"lastCalculation"</code>, preventing cold-start data loss across restarts.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- SECTION 6: HARDWARE & SOFTWARE DEPS        -->
-        <!-- ========================================== -->
-        <section id="sec-deps" class="trd-section space-y-3">
-          <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
-            <span>[ Section 06 ]</span>
-            <div class="h-px bg-brand-border flex-grow"></div>
-          </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white">6. Hardware &amp; Software Dependencies</h3>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border">
-              <span class="font-bold text-white block mb-2">Host Platform Specifications</span>
-              <ul class="space-y-1.5 text-brand-muted">
-                <li><strong class="text-slate-200">Target Framework:</strong> MIT App Inventor 2 (Build 30+)</li>
-                <li><strong class="text-slate-200">Minimum Android API:</strong> API 21 (Android 5.0 Lollipop)</li>
-                <li><strong class="text-slate-200">Recommended Android API:</strong> API 29+ (Android 10 - 16)</li>
-                <li><strong class="text-slate-200">Hardware Requirements:</strong> 1.0 GHz ARM/x86 CPU, 512MB RAM</li>
-              </ul>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border">
-              <span class="font-bold text-white block mb-2">Browser Engine &amp; Web Standards</span>
-              <ul class="space-y-1.5 text-brand-muted">
-                <li><strong class="text-slate-200">Rendering Engine:</strong> Android System WebView (Chromium M80+)</li>
-                <li><strong class="text-slate-200">Graphic Standards:</strong> SVG 2.0 with CSS Stroke Dashoffset</li>
-                <li><strong class="text-slate-200">Scripting Standard:</strong> ECMAScript 6 (ES6 Vanilla JS)</li>
-                <li><strong class="text-slate-200">Security Clearance:</strong> Local Asset Sandbox (UsesLocation: False)</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- SECTION 7: VERIFICATION & TESTING MATRIX   -->
-        <!-- ========================================== -->
-        <section id="sec-matrix" class="trd-section space-y-4">
-          <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
-            <span>[ Section 07 ]</span>
-            <div class="h-px bg-brand-border flex-grow"></div>
-          </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white">7. Quality Assurance &amp; Verification Matrix</h3>
-
-          <div class="overflow-x-auto rounded-xl border border-brand-border">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-brand-card text-brand-muted font-mono uppercase text-[10px]">
-                <tr>
-                  <th class="p-3">Test ID</th>
-                  <th class="p-3">Test Condition</th>
-                  <th class="p-3">Demographics &amp; Vector</th>
-                  <th class="p-3">Expected Theme &amp; Behavior</th>
-                  <th class="p-3">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-brand-border font-mono text-[11px] text-slate-300">
-                <tr>
-                  <td class="p-3 text-brand-accent">TC-01</td>
-                  <td>Normal Weight Range</td>
-                  <td>Male, 25y | H: 175cm, W: 68.5kg</td>
-                  <td>BMI: 22.4, Status: "Normal Weight", Theme: #00D29D, Gauge: 55%</td>
-                  <td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-brand-accent">TC-02</td>
-                  <td>Underweight Boundary</td>
-                  <td>Female, 20y | H: 180cm, W: 55.0kg</td>
-                  <td>BMI: 17.0, Status: "Underweight", Theme: #38bdf8, Gauge: 25%</td>
-                  <td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-brand-accent">TC-03</td>
-                  <td>Overweight Boundary</td>
-                  <td>Male, 38y | H: 170cm, W: 78.0kg</td>
-                  <td>BMI: 27.0, Status: "Overweight", Theme: #facc15, Gauge: 75%</td>
-                  <td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-brand-accent">TC-04</td>
-                  <td>Obesity Boundary</td>
-                  <td>Female, 45y | H: 165cm, W: 90.0kg</td>
-                  <td>BMI: 33.1, Status: "Obesity", Theme: #ef4444, Gauge: 95%</td>
-                  <td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-brand-accent">TC-05</td>
-                  <td>Offline Flight Mode</td>
-                  <td>Airplane Mode: Enabled</td>
-                  <td>HTML loads with zero errors, IPC &amp; animations intact</td>
-                  <td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-      </div>
-
-      <!-- Modal Bottom Actions Bar -->
-      <div class="px-6 py-4 border-t border-brand-border bg-brand-card/90 flex flex-col sm:flex-row items-center justify-between gap-3 flex-shrink-0 text-xs">
-        <span class="text-brand-muted">Press <kbd class="px-1.5 py-0.5 rounded bg-brand-bg border border-brand-border text-slate-300 font-mono text-[10px]">ESC</kbd> to exit modal</span>
-        <div class="flex items-center gap-3">
-          <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-brand-border hover:bg-slate-700 text-white font-semibold transition">
-            Print Document
-          </button>
-          <button onclick="closeTrdModal()" class="px-5 py-2 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-brand-void font-extrabold transition">
-            Close Viewer
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ======================================================== -->
-  <!-- 8. INTERACTIVE JAVASCRIPT LOGIC                          -->
-  <!-- ======================================================== -->
-  <script>
-    const circumference = 2 * Math.PI * 90; // ~565.487
-    let simGender = "Male";
-    let simAge = 25;
-
-    const showcaseVideo = document.getElementById('showcase-video');
-    const showcaseSoundtrack = document.getElementById('showcase-soundtrack');
-    const showcaseAudioStatus = document.getElementById('showcase-audio-status');
-    const enableShowcaseSoundButton = document.getElementById('showcase-enable-sound');
-
-    async function syncShowcaseSoundtrack() {
-      if (showcaseVideo.paused || showcaseVideo.ended) {
-        showcaseSoundtrack.pause();
-        return;
-      }
-
-      showcaseSoundtrack.currentTime = showcaseVideo.currentTime;
-      showcaseSoundtrack.playbackRate = showcaseVideo.playbackRate;
-      showcaseSoundtrack.muted = showcaseVideo.muted;
-      showcaseSoundtrack.volume = showcaseVideo.volume;
-
-      try {
-        await showcaseSoundtrack.play();
-        enableShowcaseSoundButton.hidden = true;
-        showcaseAudioStatus.textContent = 'Original instrumental soundtrack playing.';
-      } catch (error) {
-        console.error('Showcase soundtrack playback failed:', error);
-        showcaseAudioStatus.textContent = 'Sound could not start automatically. Select Enable soundtrack to hear the video.';
-        enableShowcaseSoundButton.hidden = false;
-      }
-    }
-
-    showcaseVideo.addEventListener('play', syncShowcaseSoundtrack);
-    showcaseVideo.addEventListener('pause', () => showcaseSoundtrack.pause());
-    showcaseVideo.addEventListener('ended', () => {
-      showcaseSoundtrack.pause();
-      showcaseSoundtrack.currentTime = 0;
-      showcaseAudioStatus.textContent = 'Showcase finished. Replay the video to hear the soundtrack again.';
-    });
-    showcaseVideo.addEventListener('seeking', () => showcaseSoundtrack.pause());
-    showcaseVideo.addEventListener('seeked', syncShowcaseSoundtrack);
-    showcaseVideo.addEventListener('ratechange', () => {
-      showcaseSoundtrack.playbackRate = showcaseVideo.playbackRate;
-    });
-    showcaseVideo.addEventListener('volumechange', () => {
-      showcaseSoundtrack.muted = showcaseVideo.muted;
-      showcaseSoundtrack.volume = showcaseVideo.volume;
-    });
-    showcaseSoundtrack.addEventListener('error', () => {
-      showcaseAudioStatus.textContent = 'The soundtrack file could not be loaded. Check that the showcase audio file is available.';
-      enableShowcaseSoundButton.hidden = true;
-      console.error('Showcase soundtrack failed to load:', showcaseSoundtrack.error);
-    });
-    enableShowcaseSoundButton.addEventListener('click', syncShowcaseSoundtrack);
-
-    /* Gender and Age Interactive Handlers for Phone Mockup */
-    function simSetGender(gender) {
-      simGender = gender;
-      const btnM = document.getElementById('sim-btn-male');
-      const btnF = document.getElementById('sim-btn-female');
-
-      if (gender === 'Male') {
-        btnM.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 bg-[#1e293b] text-[#00d29d] border border-[#2e3e55]';
-        btnF.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 text-[#6c7c93] hover:text-white border-transparent';
-      } else {
-        btnF.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 bg-[#1e293b] text-[#00d29d] border border-[#2e3e55]';
-        btnM.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 text-[#6c7c93] hover:text-white border-transparent';
-      }
-      simUpdateProfileText();
-    }
-
-    function simAdjustAge(delta) {
-      simAge = Math.max(5, Math.min(100, simAge + delta));
-      document.getElementById('sim-disp-age').innerText = simAge;
-      simUpdateProfileText();
-    }
-
-    function simUpdateProfileText() {
-      document.getElementById('sim-stat-profile').innerText = `${simGender}, ${simAge} yrs`;
-    }
-
-    /* Modal Control Logic */
-    function openTrdModal(anchorId = null) {
-      const modal = document.getElementById('trd-modal');
-      modal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-
-      if (anchorId) {
-        setTimeout(() => {
-          const target = document.getElementById(anchorId);
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 120);
-      }
-    }
-
-    function closeTrdModal() {
-      const modal = document.getElementById('trd-modal');
-      modal.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    function openTrdSection(sectionId) {
-      openTrdModal(sectionId);
-    }
-
-    /* Help Dropdown Toggle */
-    function toggleHelpDropdown() {
-      const dropdown = document.getElementById('help-dropdown');
-      dropdown.classList.toggle('hidden');
-    }
-
-    function hideHelpDropdown() {
-      const dropdown = document.getElementById('help-dropdown');
-      dropdown.classList.add('hidden');
-    }
-
-    /* Close Dropdown on outside click */
-    window.addEventListener('click', function(e) {
-      const btn = document.getElementById('help-menu-button');
-      const dropdown = document.getElementById('help-dropdown');
-      if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
-        hideHelpDropdown();
-      }
-    });
-
-    /* Keyboard Esc Support */
-    window.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closeTrdModal();
-        hideHelpDropdown();
-      }
-    });
-
-    /* Filter sections via tabs inside modal */
-    function switchTab(tabKey) {
-      const buttons = ['all', 'team', 'arch', 'func', 'nonfunc', 'matrix'];
-      buttons.forEach(k => {
-        const b = document.getElementById(`tab-btn-${k}`);
-        if (`tab-${k}` === tabKey) {
-          b.className = 'px-3 py-1.5 rounded-lg bg-brand-accent/20 text-brand-accent font-bold transition';
-        } else {
-          b.className = 'px-3 py-1.5 rounded-lg hover:bg-brand-border text-slate-300 transition';
-        }
-      });
-
-      const sections = document.querySelectorAll('.trd-section');
-      if (tabKey === 'tab-all') {
-        sections.forEach(s => s.style.display = 'block');
-      } else if (tabKey === 'tab-team') {
-        sections.forEach(s => s.style.display = (s.id === 'sec-team') ? 'block' : 'none');
-      } else if (tabKey === 'tab-arch') {
-        sections.forEach(s => s.style.display = (s.id === 'sec-arch' || s.id === 'sec-protocol') ? 'block' : 'none');
-      } else if (tabKey === 'tab-func') {
-        sections.forEach(s => s.style.display = (s.id === 'sec-func') ? 'block' : 'none');
-      } else if (tabKey === 'tab-nonfunc') {
-        sections.forEach(s => s.style.display = (s.id === 'sec-nonfunc' || s.id === 'sec-deps') ? 'block' : 'none');
-      } else if (tabKey === 'tab-matrix') {
-        sections.forEach(s => s.style.display = (s.id === 'sec-matrix') ? 'block' : 'none');
-      }
-    }
-
-    /* Phone Simulator Severity Theming and Calculation Logic */
-    function simulateRecalculate() {
-      const hInput = parseFloat(document.getElementById('sim-input-height').value);
-      const wInput = parseFloat(document.getElementById('sim-input-weight').value);
-
-      if (isNaN(hInput) || isNaN(wInput) || hInput <= 0 || wInput <= 0) {
-        return;
-      }
-
-      const hm = hInput / 100;
-      const bmi = (wInput / (hm * hm)).toFixed(1);
-
-      const minW = (18.5 * hm * hm).toFixed(1);
-      const maxW = (24.9 * hm * hm).toFixed(1);
-
-      let status = "Normal Weight";
-      let primeStatus = "Optimal Zone";
-      let percent = 55;
-
-      let color1 = "#00D29D";
-      let color2 = "#14B8A6";
-      let bgTag = "rgba(0, 210, 157, 0.15)";
-
-      if (bmi < 18.5) {
-        status = "Underweight";
-        primeStatus = "Low Zone";
-        percent = 25;
-        color1 = "#38bdf8";
-        color2 = "#0284c7";
-        bgTag = "rgba(56, 189, 248, 0.15)";
-      } else if (bmi <= 24.9) {
-        status = "Normal Weight";
-        primeStatus = "Optimal Zone";
-        percent = 55;
-        color1 = "#00D29D";
-        color2 = "#14B8A6";
-        bgTag = "rgba(0, 210, 157, 0.15)";
-      } else if (bmi <= 29.9) {
-        status = "Overweight";
-        primeStatus = "Warning Zone";
-        percent = 75;
-        color1 = "#facc15";
-        color2 = "#eab308";
-        bgTag = "rgba(250, 204, 21, 0.15)";
-      } else {
-        status = "Obesity";
-        primeStatus = "High Risk";
-        percent = 95;
-        color1 = "#ef4444";
-        color2 = "#b91c1c";
-        bgTag = "rgba(239, 68, 68, 0.15)";
-      }
-
-      // Update Mockup Elements
-      document.getElementById('sim-bmi-val').innerText = bmi;
-      const badge = document.getElementById('sim-bmi-badge');
-      badge.style.backgroundColor = bgTag;
-      badge.style.color = color1;
-      badge.innerText = status;
-
-      document.getElementById('sim-range-val').innerText = `${minW} – ${maxW} kg`;
-      const primeEl = document.getElementById('sim-prime-val');
-      primeEl.innerText = primeStatus;
-      primeEl.style.color = color1;
-
-      // Update Dynamic SVG Gradient Stops
-      document.getElementById('sim-grad-stop1').setAttribute('stop-color', color1);
-      document.getElementById('sim-grad-stop2').setAttribute('stop-color', color2);
-
-      // Update SVG Circular Meter Offset
-      const circle = document.getElementById('sim-progress-circle');
-      const offset = circumference - (percent / 100) * circumference;
-      circle.style.strokeDashoffset = offset;
-
-      simUpdateProfileText();
-    }
-
-    // Initialize Simulator at Default State
-    window.addEventListener('load', () => {
-      simulateRecalculate();
-    });
-  </script>
-</body>
+  </body>
 </html>
