@@ -82,6 +82,15 @@
       transform: scale(1) translateY(0);
     }
 
+    .app-gallery-track {
+      scrollbar-width: thin;
+      scrollbar-color: #2A3B54 #121924;
+      scroll-snap-type: x mandatory;
+    }
+    .app-gallery-item {
+      scroll-snap-align: start;
+    }
+
     /* Print Formatting for TRD */
     @media print {
       body * { visibility: hidden !important; }
@@ -384,7 +393,53 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 4. ARCHITECTURE HIGHLIGHT SECTION                         -->
+    <!-- 4. APP SCREENSHOTS & STORE FEATURE GRAPHIC               -->
+    <!-- ======================================================== -->
+    <section id="app-gallery" class="py-16 md:py-20 border-b border-brand-border">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+          <div>
+            <span class="text-xs font-bold text-brand-accent uppercase tracking-widest">CalcuFit on Google Play</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">App screenshots</h2>
+            <p class="text-sm text-brand-muted mt-2">A closer look at your offline BMI dashboard and daily health metrics.</p>
+          </div>
+          <span class="self-start sm:self-auto inline-flex items-center gap-2 rounded-full border border-brand-border bg-brand-card px-3 py-1.5 text-xs font-semibold text-slate-300">
+            <span class="h-2 w-2 rounded-full bg-brand-accent"></span>
+            Offline BMI tracker
+          </span>
+        </div>
+
+        <div class="app-gallery-track flex gap-5 overflow-x-auto pb-5 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:pb-0">
+          <figure class="app-gallery-item w-[72vw] max-w-[280px] flex-none overflow-hidden rounded-2xl border border-brand-border bg-brand-card shadow-xl sm:w-full sm:max-w-none">
+            <img src="assets/app-gallery/screenshot-body-overview.jpg" alt="CalcuFit dashboard showing a normal BMI and body profile" class="block h-auto w-full" loading="lazy">
+            <figcaption class="border-t border-brand-border px-4 py-3 text-sm font-semibold text-slate-200">Know your body</figcaption>
+          </figure>
+
+          <figure class="app-gallery-item w-[72vw] max-w-[280px] flex-none overflow-hidden rounded-2xl border border-brand-border bg-brand-card shadow-xl sm:w-full sm:max-w-none">
+            <img src="assets/app-gallery/screenshot-bmi-partner.jpg" alt="CalcuFit BMI dashboard with a healthy-range and profile summary" class="block h-auto w-full" loading="lazy">
+            <figcaption class="border-t border-brand-border px-4 py-3 text-sm font-semibold text-slate-200">Your BMI partner</figcaption>
+          </figure>
+
+          <figure class="app-gallery-item w-[72vw] max-w-[280px] flex-none overflow-hidden rounded-2xl border border-brand-border bg-brand-card shadow-xl sm:w-full sm:max-w-none">
+            <img src="assets/app-gallery/screenshot-bmi-calculator.jpg" alt="CalcuFit BMI calculator showing an obesity result and high-risk status" class="block h-auto w-full" loading="lazy">
+            <figcaption class="border-t border-brand-border px-4 py-3 text-sm font-semibold text-slate-200">Calculate your BMI</figcaption>
+          </figure>
+        </div>
+
+        <div class="mt-12 md:mt-16">
+          <div class="mb-5">
+            <h3 class="text-lg sm:text-xl font-bold text-white">Google Play feature graphic</h3>
+            <p class="text-sm text-brand-muted mt-1">CalcuFit: Live smart. Know your body.</p>
+          </div>
+          <figure class="overflow-hidden rounded-2xl border border-brand-border bg-brand-card shadow-2xl shadow-brand-accent/10">
+            <img src="assets/app-gallery/feature-graphic.jpg" alt="CalcuFit Google Play feature graphic with two app screens and the message Live Smart. Know Your Body." class="block h-auto w-full" loading="lazy">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 5. ARCHITECTURE HIGHLIGHT SECTION                         -->
     <!-- ======================================================== -->
     <section id="architecture" class="py-16 bg-brand-bg border-b border-brand-border">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -455,7 +510,7 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 5. CLINICAL VALIDATION MATRIX TABLE                       -->
+    <!-- 6. CLINICAL VALIDATION MATRIX TABLE                       -->
     <!-- ======================================================== -->
     <section id="matrix" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center max-w-2xl mx-auto mb-10">
