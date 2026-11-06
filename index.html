@@ -190,16 +190,6 @@
 
       <!-- Primary Action Buttons (Includes PRD, TRD & Download APK) -->
       <div class="flex shrink-0 items-center gap-2 sm:gap-3">
-        <button onclick="openPrdModal()" class="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border hover:border-brand-teal/50 text-slate-100 text-xs sm:text-sm font-semibold transition group">
-          <svg class="w-4 h-4 text-brand-teal group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          <span>PRD</span>
-        </button>
-
-        <button onclick="openTrdModal()" class="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border hover:border-brand-accent/50 text-slate-100 text-xs sm:text-sm font-semibold transition group shadow-card">
-          <svg class="w-4 h-4 text-brand-accent group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          <span>TRD</span>
-        </button>
-
         <a href="#simulator" aria-label="Try Live Demo" title="Try Live Demo" class="inline-flex items-center gap-2 px-2.5 sm:px-3 py-2 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-brand-void text-xs sm:text-sm font-extrabold shadow-glow-sm transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           <span class="hidden sm:inline">Demo</span>
@@ -207,7 +197,7 @@
 
         <!-- Download APK Button -->
         <a href="./calcufit.apk?v=d3630c79" download="CalcuFit-v1.0.apk" type="application/vnd.android.package-archive" aria-label="Download CalcuFit APK" title="Download CalcuFit APK" class="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-accent/40 hover:border-brand-accent text-brand-accent text-xs sm:text-sm font-extrabold transition shadow-glow-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <img src="appicon.jpg" alt="CalcuFit Logo" class="w-5 h-5 rounded-md object-cover" />
           <span>Download<span class="hidden sm:inline"> APK</span></span>
         </a>
       </div>
@@ -404,6 +394,22 @@
       </div>
     </section>
 
+   <!-- ======================================================== -->
+    <!-- APP ICON SECTION                                         -->
+    <!-- ======================================================== -->
+    <section id="app-icon-section" class="py-12 bg-brand-bg border-b border-brand-border">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="text-xs font-bold text-brand-accent uppercase tracking-widest">Official Logo</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2 mb-6">App Icon</h2>
+        <div class="inline-block p-4 rounded-2xl border border-brand-border bg-brand-card shadow-xl shadow-brand-accent/5">
+          <img src="appicon.jpg" alt="CalcuFit App Icon" class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl object-cover mx-auto shadow-md">
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 5. FEATURED GRAPHIC                                      -->
+    <!-- ======================================================== -->
     <section id="featured-graphic" class="py-16 md:py-20 bg-brand-bg border-b border-brand-border">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-8">
