@@ -91,12 +91,12 @@
       scroll-snap-align: start;
     }
 
-    /* Print Formatting for TRD */
+    /* Print Formatting */
     @media print {
       body * { visibility: hidden !important; }
-      #trd-modal, #trd-modal * { visibility: visible !important; }
-      #trd-modal { position: absolute; left: 0; top: 0; width: 100%; background: #ffffff !important; color: #000000 !important; }
-      #trd-modal .bg-brand-bg, #trd-modal .bg-brand-card, #trd-modal .bg-brand-void { background: #ffffff !important; color: #111827 !important; border-color: #e5e7eb !important; }
+      #trd-modal *, #prd-modal *, #privacy-modal * { visibility: visible !important; }
+      #trd-modal, #prd-modal, #privacy-modal { position: absolute; left: 0; top: 0; width: 100%; background: #ffffff !important; color: #000000 !important; }
+      .bg-brand-bg, .bg-brand-card, .bg-brand-void { background: #ffffff !important; color: #111827 !important; border-color: #e5e7eb !important; }
       .no-print { display: none !important; }
     }
   </style>
@@ -113,7 +113,7 @@
         <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-brand-accent font-semibold border border-brand-accent/20">
           <span class="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse"></span> Offline Native APK
         </span>
-        <span class="hidden sm:inline text-brand-muted">MIT App Inventor + Chromium Local WebViewer Architecture</span>
+      
       </div>
 
       <div class="flex items-center gap-3 sm:gap-4 font-medium">
@@ -133,21 +133,20 @@
             <span>Help</span>
             <svg class="w-3.5 h-3.5 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </button>
-          <!-- Help Dropdown Menu -->
-          <div id="help-dropdown" class="hidden absolute right-0 mt-1 w-72 bg-brand-card border border-brand-border rounded-xl shadow-2xl p-1.5 z-50 text-left">
-            <div class="px-3 py-2 text-[10px] font-bold text-brand-muted tracking-wider uppercase border-b border-brand-border/60">Documentation &amp; Specs</div>
+          <!-- Help Dropdown Menu with PRD, TRD, Privacy Policy & Simulator -->
+          <div id="help-dropdown" class="hidden absolute right-0 mt-1.5 w-72 bg-brand-card border border-brand-border rounded-xl shadow-2xl p-1.5 z-50 text-left">
+            <div class="px-3 py-2 text-[10px] font-bold text-brand-muted tracking-wider uppercase border-b border-brand-border/60">Documentation &amp; Support</div>
+            <button onclick="openPrdModal(); hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-200 hover:text-brand-accent flex items-center justify-between transition">
+              <span>Product Requirement Doc (PRD)</span>
+              <span class="text-[10px] bg-brand-teal/10 text-brand-teal px-1.5 py-0.5 rounded font-mono">v1.0</span>
+            </button>
             <button onclick="openTrdModal('sec-exec'); hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-200 hover:text-brand-accent flex items-center justify-between transition">
               <span>Technical Requirement Doc (TRD)</span>
               <span class="text-[10px] bg-brand-accent/10 text-brand-accent px-1.5 py-0.5 rounded font-mono">v1.3</span>
             </button>
-            <button onclick="openTrdModal('sec-team'); hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-200 hover:text-brand-accent transition">
-              Authorship &amp; Advisory Team
-            </button>
-            <button onclick="openTrdModal('sec-arch'); hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-200 hover:text-brand-accent transition">
-              System Architecture &amp; Blocks
-            </button>
-            <button onclick="openTrdModal('sec-matrix'); hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-200 hover:text-brand-accent transition">
-              QA &amp; Verification Matrix
+            <button onclick="openPrivacyModal(); hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-200 hover:text-brand-accent flex items-center justify-between transition">
+              <span>Privacy Policy</span>
+              <span class="text-[10px] bg-cyan-500/10 text-cyan-400 px-1.5 py-0.5 rounded font-mono">Secure</span>
             </button>
             <div class="border-t border-brand-border/60 mt-1 pt-1">
               <a href="#simulator" onclick="hideHelpDropdown();" class="w-full text-left px-3 py-2 text-xs rounded-lg hover:bg-brand-border text-slate-300 block transition">
@@ -183,25 +182,32 @@
 
       <!-- Quick Links -->
       <nav class="hidden xl:flex items-center gap-7 text-sm font-medium text-slate-300">
-        <a href="#features" class="hover:text-brand-accent transition">Capabilities</a>
+      
         <a href="#app-description" class="hover:text-brand-accent transition">App Description</a>
         <a href="#simulator" class="hover:text-brand-accent transition">Interactive Mockup</a>
         <a href="#matrix" class="hover:text-brand-accent transition">Clinical Ranges</a>
       </nav>
 
-      <!-- Primary Action: Open TRD Modal -->
+      <!-- Primary Action Buttons (Includes PRD, TRD & Download APK) -->
       <div class="flex shrink-0 items-center gap-2 sm:gap-3">
-        <button onclick="openTrdModal()" class="hidden xl:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border hover:border-brand-accent/50 text-slate-100 text-xs sm:text-sm font-semibold transition group shadow-card">
-          <svg class="w-4 h-4 text-brand-accent group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          <span>Open TRD Spec</span>
+        <button onclick="openPrdModal()" class="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border hover:border-brand-teal/50 text-slate-100 text-xs sm:text-sm font-semibold transition group">
+          <svg class="w-4 h-4 text-brand-teal group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          <span>PRD</span>
         </button>
 
-        <a href="#simulator" aria-label="Try Live Demo" title="Try Live Demo" class="inline-flex items-center gap-2 px-2.5 sm:px-4 py-2 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-brand-void text-xs sm:text-sm font-extrabold shadow-glow-sm transition">
+        <button onclick="openTrdModal()" class="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border hover:border-brand-accent/50 text-slate-100 text-xs sm:text-sm font-semibold transition group shadow-card">
+          <svg class="w-4 h-4 text-brand-accent group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>TRD</span>
+        </button>
+
+        <a href="#simulator" aria-label="Try Live Demo" title="Try Live Demo" class="inline-flex items-center gap-2 px-2.5 sm:px-3 py-2 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-brand-void text-xs sm:text-sm font-extrabold shadow-glow-sm transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          <span class="hidden sm:inline">Try Live Demo</span>
+          <span class="hidden sm:inline">Demo</span>
         </a>
-        <a href="./calcufit.apk?v=d3630c79" download="CalcuFit-v1.0.apk" type="application/vnd.android.package-archive" aria-label="Download CalcuFit APK" title="Download CalcuFit APK" class="inline-flex items-center gap-2 px-2.5 sm:px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-accent/40 hover:border-brand-accent text-brand-accent text-xs sm:text-sm font-extrabold transition">
-          <img src="appicon.jpg" alt="" class="h-6 w-6 rounded-full object-cover" aria-hidden="true">
+
+        <!-- Download APK Button -->
+        <a href="./calcufit.apk?v=d3630c79" download="CalcuFit-v1.0.apk" type="application/vnd.android.package-archive" aria-label="Download CalcuFit APK" title="Download CalcuFit APK" class="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-accent/40 hover:border-brand-accent text-brand-accent text-xs sm:text-sm font-extrabold transition shadow-glow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
           <span>Download<span class="hidden sm:inline"> APK</span></span>
         </a>
       </div>
@@ -213,7 +219,6 @@
   <!-- ======================================================== -->
   <main class="flex-grow">
     <section class="relative overflow-hidden py-12 md:py-20 lg:py-24 border-b border-brand-border">
-      <!-- Glow background -->
       <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-brand-accent/10 rounded-full blur-[130px] pointer-events-none -z-10"></div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -231,7 +236,7 @@
             </h1>
 
             <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              Engineered with <strong class="text-white font-semibold">MIT App Inventor</strong> block logic and an integrated, hardware-accelerated <strong class="text-white font-semibold">Chromium HTML/CSS dashboard</strong>. Now supporting dynamic gender demographics, age steppers, multi-tone severity theming, and real-time SVG circular gauges with zero server dependency.
+              Know your numbers with CalcuFit, a simple BMI calculator and body-weight tracker designed to work offline. Enter your height, weight, age, and gender to view an estimated BMI, its category, and an estimated healthy-weight range.
             </p>
 
             <!-- Project Authorship Badge -->
@@ -242,58 +247,32 @@
               <div class="text-xs space-y-0.5">
                 <div class="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Project Credits &amp; Engineering</div>
                 <div class="text-white font-bold text-sm">Lead Developer: <span class="text-brand-accent">Johnrey Camacho</span></div>
-                <div class="text-slate-300">IT Consultant: <span class="text-teal-400 font-medium">Dr. Erick R. Abuzo, IT Consultant</span></div>
-              </div>
-            </div>
-
-            <!-- Quick Specs Row -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 max-w-lg mx-auto lg:mx-0 text-left">
-              <div class="p-3.5 rounded-xl bg-brand-card/80 border border-brand-border">
-                <div class="text-[11px] text-brand-muted font-semibold uppercase tracking-wider">Network Dependency</div>
-                <div class="text-sm font-bold text-brand-accent mt-0.5 flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 4.243a9 9 0 01-12.728 0m0 0l2.829-2.829m-2.829 2.829L3 21m2.829-15.536a5 5 0 017.072 0m0 0l2.829 2.829"/></svg>
-                  0% Offline
-                </div>
-              </div>
-              <div class="p-3.5 rounded-xl bg-brand-card/80 border border-brand-border">
-                <div class="text-[11px] text-brand-muted font-semibold uppercase tracking-wider">IPC Latency</div>
-                <div class="text-sm font-bold text-white mt-0.5 font-mono flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-brand-teal"></span> &lt; 50 ms
-                </div>
-              </div>
-              <div class="col-span-2 sm:col-span-1 p-3.5 rounded-xl bg-brand-card/80 border border-brand-border">
-                <div class="text-[11px] text-brand-muted font-semibold uppercase tracking-wider">UI Engine</div>
-                <div class="text-sm font-bold text-cyan-400 mt-0.5">Vector SVG 360°</div>
+                <div class="text-slate-300">IT Consultant: <span class="text-teal-400 font-medium">Dr. Erick R. Abuzo</span></div>
               </div>
             </div>
 
             <!-- CTA Actions -->
             <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
-              <button onclick="openTrdModal('sec-exec')" class="px-6 py-3.5 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-brand-void font-extrabold text-sm transition-all shadow-glow flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                Read Technical Requirements
+              <button onclick="openPrdModal()" class="px-6 py-3.5 rounded-xl bg-brand-teal hover:bg-brand-teal/80 text-brand-void font-extrabold text-sm transition-all shadow-glow flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                Read Product Requirement Doc (PRD)
               </button>
-              <a href="#simulator" class="px-6 py-3.5 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border text-slate-200 font-bold text-sm transition flex items-center gap-2">
-                <span>Interact with Mockup</span>
+              <button onclick="openTrdModal('sec-exec')" class="px-6 py-3.5 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-border text-slate-200 font-bold text-sm transition flex items-center gap-2">
+                <span>Read Technical Requirements (TRD)</span>
                 <svg class="w-4 h-4 text-brand-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-              </a>
+              </button>
             </div>
           </div>
 
           <!-- Hero Phone Simulator Right (5 cols) -->
           <div id="simulator" class="lg:col-span-5 flex justify-center">
-            <!-- Realistic Phone Chassis -->
             <div class="w-[340px] sm:w-[360px] bg-[#03070B] p-3 rounded-[46px] shadow-2xl border-[4px] border-[#2A374A] ring-1 ring-white/10 relative">
-              <!-- Top Speaker / Notch Area -->
               <div class="absolute top-6 left-1/2 -translate-x-1/2 w-28 h-4 bg-black rounded-full z-20 flex items-center justify-center">
                 <div class="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-800 ml-auto mr-3"></div>
               </div>
 
-              <!-- Phone Screen Content (CalcuFit Exact UI matching user image & code) -->
               <div class="bg-[#0b111a] rounded-[36px] overflow-hidden pt-8 pb-5 px-4 sm:px-5 border border-brand-border/80 flex flex-col justify-between min-h-[690px] text-white">
-                
                 <div>
-                  <!-- 1. Top Bar -->
                   <div class="flex items-center justify-between mt-1">
                     <div class="flex items-center gap-2.5">
                       <div class="w-8 h-8 rounded-lg bg-[#0F3D32] flex items-center justify-center text-brand-accent shadow-sm">
@@ -306,9 +285,7 @@
                     <span class="text-[10px] font-bold text-slate-400 bg-[#141c28] border border-[#222e40] px-2.5 py-1 rounded-full">Offline</span>
                   </div>
 
-                  <!-- 2. Gender and Age Grid (NEW APP FEATURE) -->
                   <div class="grid grid-cols-2 gap-2 mt-3">
-                    <!-- Gender Selector -->
                     <div class="flex bg-[#121924] border border-[#1c2738] rounded-xl p-0.5 gap-1">
                       <button type="button" id="sim-btn-male" onclick="simSetGender('Male')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 bg-[#1e293b] text-[#00d29d] border border-[#2e3e55]">
                         ♂ Male
@@ -318,7 +295,6 @@
                       </button>
                     </div>
 
-                    <!-- Age Input Stepper -->
                     <div class="bg-[#121924] border border-[#1c2738] rounded-xl flex items-center justify-between px-2.5 py-1">
                       <span class="text-[11px] font-bold text-[#6c7c93]">Age</span>
                       <div class="flex items-center gap-1.5">
@@ -329,7 +305,6 @@
                     </div>
                   </div>
 
-                  <!-- 3. Circular SVG Meter Section -->
                   <div class="relative w-48 h-48 mx-auto my-3 flex items-center justify-center">
                     <svg class="w-full h-full -rotate-90" viewBox="0 0 200 200">
                       <defs>
@@ -348,7 +323,6 @@
                     </div>
                   </div>
 
-                  <!-- 4. Stat Cards Grid -->
                   <div class="grid grid-cols-2 gap-2 mt-2">
                     <div class="bg-[#121924] border border-[#1c2738] rounded-xl p-3">
                       <div class="text-[10px] font-semibold text-[#68798e]">Healthy Range</div>
@@ -360,7 +334,6 @@
                     </div>
                   </div>
 
-                  <!-- 5. Details & Profile Card -->
                   <div class="bg-[#121924] border border-[#1c2738] rounded-xl p-3 mt-2 space-y-2">
                     <div class="flex items-center justify-between text-xs">
                       <span class="text-[#68798e] font-semibold">Height</span>
@@ -383,7 +356,6 @@
                   </div>
                 </div>
 
-                <!-- 6. Bottom Recalculate Button -->
                 <button id="sim-btn-recalc" onclick="simulateRecalculate()" class="w-full mt-3 py-3 rounded-xl bg-[#00d29d] hover:bg-[#00b889] text-[#05241b] font-extrabold text-xs tracking-wider flex items-center justify-center gap-2 shadow-glow-sm transition active:scale-95">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                   RECALCULATE
@@ -397,14 +369,14 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 4. APP DESCRIPTION                                       -->
+    <!-- 4. APP DESCRIPTION SECTION                               -->
     <!-- ======================================================== -->
     <section id="app-description" class="py-16 md:py-20 border-b border-brand-border">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-10">
           <span class="text-xs font-bold text-brand-accent uppercase tracking-widest">CalcuFit on Google Play</span>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">App description</h2>
-          <p class="text-sm text-brand-muted mt-2">An offline BMI calculator and body-weight tracker with clear, easy-to-read results.</p>
+          <p class="text-sm text-brand-muted mt-2">Know your numbers with CalcuFit, a simple BMI calculator and body-weight tracker designed to work offline.</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -424,20 +396,14 @@
                 <li>View an estimated healthy-weight range based on BMI.</li>
                 <li>Keep the most recent calculation saved locally on your device.</li>
                 <li>Use the core calculator without an internet connection.</li>
-              </ul> 
-
-
-              <p>Your measurements and saved result stay in the app’s local storage on your device. CalcuFit does not send them to the developer. Clear the app’s storage or uninstall the app to remove saved local data.</p>
-              <p><strong class="text-slate-200">Please note:</strong> BMI is a general screening estimate and does not diagnose health conditions. Results are not a substitute for professional medical advice.</p>
+              </ul>
+              <p>Your measurements and saved result stay in the app’s local storage on your device. CalcuFit does not send them to the developer.</p>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ======================================================== -->
-    <!-- 5. FEATURE GRAPHIC                                       -->
-    <!-- ======================================================== -->
     <section id="featured-graphic" class="py-16 md:py-20 bg-brand-bg border-b border-brand-border">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-8">
@@ -508,7 +474,7 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 8. CLINICAL VALIDATION MATRIX TABLE                       -->
+    <!-- 5. CLINICAL VALIDATION MATRIX TABLE                      -->
     <!-- ======================================================== -->
     <section id="matrix" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center max-w-2xl mx-auto mb-10">
@@ -583,27 +549,107 @@
         <span>Consultant: <strong class="text-slate-300">Dr. Erick R. Abuzo</strong></span>
       </div>
       <div class="flex items-center gap-6">
-        <a href="#app-description" class="hover:text-brand-accent transition">App description</a>
-        <a href="privacy-policy.html" class="hover:text-brand-accent transition">Privacy policy</a>
-        <button onclick="openTrdModal()" class="hover:text-brand-accent transition">Technical Requirement Document</button>
-        <button onclick="window.print()" class="hover:text-brand-accent transition">Print TRD</button>
-        <a href="#simulator" class="hover:text-brand-accent transition">Interactive Testbed</a>
+        <button onclick="openPrdModal()" class="hover:text-brand-teal transition">PRD</button>
+        <button onclick="openTrdModal()" class="hover:text-brand-accent transition">TRD</button>
+        <button onclick="openPrivacyModal()" class="hover:text-cyan-400 transition">Privacy Policy</button>
+        <a href="./calcufit.apk?v=d3630c79" download="CalcuFit-v1.0.apk" class="hover:text-brand-accent transition">Download APK</a>
       </div>
     </div>
   </footer>
 
   <!-- ======================================================== -->
-  <!-- 7. POPUP MODAL: TECHNICAL REQUIREMENT DOCUMENT (TRD)     -->
+  <!-- 7. POPUP MODAL: PRODUCT REQUIREMENT DOCUMENT (PRD)       -->
   <!-- ======================================================== -->
-  <div id="trd-modal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="trd-modal-title">
-    
-    <!-- Modal Window Chassis -->
-    <div class="modal-container w-full max-w-5xl bg-brand-bg border border-brand-border rounded-2xl shadow-modal overflow-hidden flex flex-col max-h-[92vh]">
+  <div id="prd-modal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="prd-modal-title">
+    <div class="modal-container w-full max-w-4xl bg-brand-bg border border-brand-border rounded-2xl shadow-modal overflow-hidden flex flex-col max-h-[92vh]">
       
-      <!-- Modal Top Header Bar -->
       <div class="px-5 py-4 border-b border-brand-border bg-brand-card/90 flex items-center justify-between flex-shrink-0">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-brand-darkAccent text-brand-accent flex items-center justify-center border border-brand-accent/20">
+          <div class="w-8 h-8 rounded-lg bg-brand-teal/15 text-brand-teal flex items-center justify-center border border-brand-teal/30">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+          </div>
+          <div>
+            <h2 id="prd-modal-title" class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
+              CalcuFit Product Requirement Document (PRD)
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brand-teal/15 text-brand-teal border border-brand-teal/30 font-semibold">v1.0 - FUNCTIONAL SPEC</span>
+            </h2>
+            <p class="text-[11px] text-brand-muted">Target Audience: Users, Stakeholders &amp; Mobile Evaluation Board</p>
+          </div>
+        </div>
+        <button onclick="closePrdModal()" class="p-2 rounded-lg bg-brand-border/40 hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 transition" aria-label="Close modal">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="p-6 sm:p-8 overflow-y-auto space-y-8 text-slate-200 text-xs sm:text-sm leading-relaxed font-normal">
+        <section class="space-y-3">
+          <h3 class="text-base font-bold text-white border-b border-brand-border pb-2">1. Overview &amp; Value Proposition</h3>
+          <p>
+            <strong>CalcuFit: Daily BMI Assessment and Body Weight Tracker</strong> is engineered to provide an accessible, lightweight, and completely offline health monitoring experience.
+          </p>
+          <p class="bg-brand-card p-4 rounded-xl border border-brand-border text-slate-300 italic">
+            "Know your numbers with CalcuFit, a simple BMI calculator and body-weight tracker designed to work offline. Enter your height, weight, age, and gender to view an estimated BMI, its category, and an estimated healthy-weight range. A clear dashboard brings your latest calculation and profile details together, so you can review your result at a glance."
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h3 class="text-base font-bold text-white border-b border-brand-border pb-2">2. Target User Personas &amp; Use Cases</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1">
+              <span class="font-bold text-brand-teal">Fitness Conscious Students</span>
+              <p class="text-xs text-brand-muted">Requires quick daily BMI checks between classes without relying on Wi-Fi or mobile data.</p>
+            </div>
+            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1">
+              <span class="font-bold text-brand-teal">Health &amp; Weight Watchers</span>
+              <p class="text-xs text-brand-muted">Needs reliable healthy weight boundaries computed instantly based on individual height and body profile metrics.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h3 class="text-base font-bold text-white border-b border-brand-border pb-2">3. Core Product Features</h3>
+          <ul class="list-disc list-inside space-y-2 text-brand-muted">
+            <li><strong class="text-white">Offline Functionality:</strong> Operates entirely without internet connection or external server requests.</li>
+            <li><strong class="text-white">Demographic Customization:</strong> Input age steppers and gender selections to personalize health assessments.</li>
+            <li><strong class="text-white">Visual Gauge Dashboard:</strong> 360-degree SVG circular progress meter with dynamic color coding corresponding to WHO BMI thresholds.</li>
+            <li><strong class="text-white">Healthy Weight Bounds:</strong> Automatically calculates minimum and maximum healthy weight ranges relative to entered height.</li>
+            <li><strong class="text-white">Data Privacy Assurance:</strong> All records remain locally cached on the user's device storage with zero remote telemetry.</li>
+          </ul>
+        </section>
+
+        <section class="space-y-3">
+          <h3 class="text-base font-bold text-white border-b border-brand-border pb-2">4. Project Stakeholders</h3>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div class="flex-1 bg-brand-card p-3 rounded-xl border border-brand-border">
+              <span class="text-[10px] font-mono text-brand-teal uppercase font-bold">Lead Developer</span>
+              <div class="text-white font-bold">Johnrey Camacho</div>
+            </div>
+            <div class="flex-1 bg-brand-card p-3 rounded-xl border border-brand-border">
+              <span class="text-[10px] font-mono text-brand-teal uppercase font-bold">Technical Consultant</span>
+              <div class="text-white font-bold">Dr. Erick R. Abuzo</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="px-6 py-4 border-t border-brand-border bg-brand-card/90 flex items-center justify-between flex-shrink-0 text-xs">
+        <span class="text-brand-muted">Product Requirement Specification v1.0</span>
+        <button onclick="closePrdModal()" class="px-5 py-2 rounded-xl bg-brand-teal hover:bg-brand-teal/80 text-brand-void font-extrabold transition">
+          Close PRD
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 8. POPUP MODAL: TECHNICAL REQUIREMENT DOCUMENT (TRD)     -->
+  <!-- ======================================================== -->
+  <div id="trd-modal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="trd-modal-title">
+    <div class="modal-container w-full max-w-5xl bg-brand-bg border border-brand-border rounded-2xl shadow-modal overflow-hidden flex flex-col max-h-[92vh]">
+      
+      <div class="px-5 py-4 border-b border-brand-border bg-brand-card/90 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-brand-accent/15 text-brand-accent flex items-center justify-center border border-brand-accent/30">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           </div>
           <div>
@@ -615,7 +661,6 @@
           </div>
         </div>
 
-        <!-- Quick Controls -->
         <div class="flex items-center gap-2">
           <button onclick="window.print()" title="Print TRD" class="hidden sm:inline-flex p-2 rounded-lg bg-brand-border/40 hover:bg-brand-border text-slate-300 hover:text-white transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
@@ -626,7 +671,6 @@
         </div>
       </div>
 
-      <!-- Navigation Tabs Inside Modal -->
       <div class="px-5 py-2.5 bg-brand-card/40 border-b border-brand-border/70 flex items-center gap-2 overflow-x-auto text-xs font-semibold text-brand-muted flex-shrink-0">
         <button onclick="switchTab('tab-all')" id="tab-btn-all" class="px-3 py-1.5 rounded-lg bg-brand-accent/20 text-brand-accent transition">Full Specification</button>
         <button onclick="switchTab('tab-team')" id="tab-btn-team" class="px-3 py-1.5 rounded-lg hover:bg-brand-border text-slate-300 transition">Authorship &amp; Advisory</button>
@@ -636,54 +680,25 @@
         <button onclick="switchTab('tab-matrix')" id="tab-btn-matrix" class="px-3 py-1.5 rounded-lg hover:bg-brand-border text-slate-300 transition">QA Matrix</button>
       </div>
 
-      <!-- Modal Scrollable Content Area -->
       <div id="trd-content-scroll" class="p-6 sm:p-8 overflow-y-auto space-y-12 text-slate-200 text-xs sm:text-sm leading-relaxed font-normal">
 
-        <!-- ========================================== -->
-        <!-- SECTION 1: EXECUTIVE SUMMARY & PURPOSE     -->
-        <!-- ========================================== -->
         <section id="sec-exec" class="trd-section space-y-3">
           <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
             <span>[ Section 01 ]</span>
             <div class="h-px bg-brand-border flex-grow"></div>
           </div>
           <h3 class="text-lg sm:text-xl font-bold text-white">1. Executive Summary &amp; Core Purpose</h3>
-          
           <p>
-            <strong>CalcuFit</strong> is a standalone, client-side Android application designed for high-precision daily Body Mass Index (BMI) assessment, demographic tracking (Gender, Age), and healthy weight management. The system pairs the visual sophistication of modern web dashboards with the zero-dependency simplicity of <strong>MIT App Inventor 2</strong>.
+            <strong>CalcuFit</strong> is a standalone, client-side Android application designed for high-precision daily Body Mass Index (BMI) assessment, demographic tracking (Gender, Age), and healthy weight management.
           </p>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1.5">
-              <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-brand-accent"></span> Product Problem Statement
-              </span>
-              <p class="text-xs text-brand-muted">
-                Standard App Inventor components lack native support for CSS corner radiuses, dynamic multi-color SVG circular arc meters, interactive button-group pills, and smooth severity transitions without brittle external extensions (.aix).
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1.5">
-              <span class="text-xs font-bold text-brand-accent flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-brand-teal"></span> Engineered Architectural Solution
-              </span>
-              <p class="text-xs text-brand-muted">
-                Decoupled architecture: MIT App Inventor operates as the pure backend controller (executing formulas, managing memory, and triggering modal dialogs), while a sandboxed Chromium WebViewer renders the vector presentation layer via local file loading.
-              </p>
-            </div>
-          </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SECTION 1B: AUTHORSHIP & ADVISORY TEAM     -->
-        <!-- ========================================== -->
         <section id="sec-team" class="trd-section space-y-4">
           <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
             <span>[ Section 01.B ]</span>
             <div class="h-px bg-brand-border flex-grow"></div>
           </div>
           <h3 class="text-lg sm:text-xl font-bold text-white">Project Authorship &amp; Advisory Credentials</h3>
-
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
               <div class="text-[10px] uppercase font-bold text-brand-accent tracking-wider font-mono">Lead Author / Developer</div>
@@ -692,7 +707,6 @@
                 Architect and lead software engineer responsible for the CalcuFit mobile application layout, App Inventor block algorithms, SVG circular meter implementation, and inter-process communication protocol bridge.
               </p>
             </div>
-
             <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
               <div class="text-[10px] uppercase font-bold text-teal-400 tracking-wider font-mono">Technical Advisor / Consultant</div>
               <div class="text-base font-extrabold text-white">Dr. Erick R. Abuzo</div>
@@ -704,314 +718,79 @@
           </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SECTION 2: SYSTEM ARCHITECTURE & IPC       -->
-        <!-- ========================================== -->
         <section id="sec-arch" class="trd-section space-y-4">
           <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
             <span>[ Section 02 ]</span>
             <div class="h-px bg-brand-border flex-grow"></div>
           </div>
           <h3 class="text-lg sm:text-xl font-bold text-white">2. System Architecture &amp; Local IPC Bridge</h3>
-
           <p>
-            The software executes entirely within a single sandboxed Android APK process. The visual presentation resides in <code class="text-brand-accent font-mono">landingpage.html</code>, packaged within the application’s compiled Android assets folder.
+            The software executes entirely within a single sandboxed Android APK process. The visual presentation resides in <code class="text-brand-accent font-mono">landingpage.html</code>.
           </p>
-
-          <!-- ASCII Architectural Flowchart -->
-          <div class="bg-brand-void p-4 sm:p-5 rounded-xl border border-brand-border font-mono text-[11px] leading-snug overflow-x-auto text-emerald-400">
-+-----------------------------------------------------------------------------------+
-|                           ANDROID APPLICATION RUNTIME (.APK)                      |
-|                                                                                   |
-|  +------------------------------------+    WebViewString     +-----------------+  |
-|  |       MIT APP INVENTOR CORE        |    IPC Bridge        | CHROMIUM WEBVIEW|  |
-|  | - Screen1.Initialize               |                      | - landingpage   |  |
-|  | - Procedures (calculateAndSync)    | ===================> | - ♂/♀ Selector  |  |
-|  | - Notifier Dialog Controller       |   Pipe Delimited     | - Age Stepper   |  |
-|  | - TinyDB User Record Cache         |     Data Stream      | - Dynamic Theme |  |
-|  +------------------------------------+                      +-----------------+  |
-|                  ^                                                    |           |
-|                  |                WebViewStringChange                 |           |
-|                  +----------------------------------------------------+           |
-|                                "btn_clicked" Trigger                              |
-+-----------------------------------------------------------------------------------+
-          </div>
-
-          <h4 class="text-sm font-bold text-white pt-2">2.1 Asset Resolution Pipeline</h4>
-          <ul class="list-disc list-inside space-y-1 text-xs text-brand-muted">
-            <li><strong class="text-slate-200">Compiled Production APK:</strong> Loaded securely via internal sandboxed URI: <code class="text-brand-teal font-mono">http://localhost/landingpage.html</code>.</li>
-            <li><strong class="text-slate-200">AI Companion Development Environment:</strong> Routed via external sandbox directory: <code class="text-brand-teal font-mono">http://localhost/mnt/sdcard/AppInventor/assets/landingpage.html</code>.</li>
-          </ul>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SECTION 3: FUNCTIONAL REQUIREMENTS        -->
-        <!-- ========================================== -->
         <section id="sec-func" class="trd-section space-y-4">
           <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
             <span>[ Section 03 ]</span>
             <div class="h-px bg-brand-border flex-grow"></div>
           </div>
           <h3 class="text-lg sm:text-xl font-bold text-white">3. Functional Requirements &amp; Clinical Formulas</h3>
-
-          <!-- Formulas Grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Formula 1 -->
             <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-              <span class="text-xs font-bold text-white flex items-center justify-between">
-                <span>Quetelet BMI Calculation Formula</span>
-                <span class="text-[10px] text-brand-accent font-mono">FR-01</span>
-              </span>
+              <span class="text-xs font-bold text-white">Quetelet BMI Calculation Formula</span>
               <div class="bg-brand-bg p-3 rounded-lg border border-brand-border font-mono text-xs text-brand-accent">
                 BMI = Weight_kg / (Height_m)²
               </div>
-              <p class="text-xs text-brand-muted leading-relaxed">
-                Height is input in centimeters ($H_{\text{cm}}$), converted to meters ($H_{\text{m}} = H_{\text{cm}} / 100$), and evaluated to 1 decimal place using App Inventor’s <code class="text-slate-200">format as number(x, 1)</code> block.
-              </p>
             </div>
-
-            <!-- Formula 2 -->
             <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-              <span class="text-xs font-bold text-white flex items-center justify-between">
-                <span>Healthy Weight Range Bounds</span>
-                <span class="text-[10px] text-brand-accent font-mono">FR-02</span>
-              </span>
+              <span class="text-xs font-bold text-white">Healthy Weight Range Bounds</span>
               <div class="bg-brand-bg p-3 rounded-lg border border-brand-border font-mono text-xs text-brand-teal">
                 W_min = 18.5 × (Height_m)²<br>
                 W_max = 24.9 × (Height_m)²
               </div>
-              <p class="text-xs text-brand-muted leading-relaxed">
-                Dynamically computes ideal clinical bounds based solely on the user's specific stature, rendered as a unified string: <code class="text-slate-200">"{W_min} – {W_max} kg"</code>.
-              </p>
             </div>
-          </div>
-
-          <!-- Demographics & Theme Features -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-              <span class="text-xs font-bold text-white flex items-center justify-between">
-                <span>Gender &amp; Age Demographics Capture</span>
-                <span class="text-[10px] text-brand-accent font-mono">FR-03</span>
-              </span>
-              <p class="text-xs text-brand-muted leading-relaxed">
-                Provides dedicated pill controls for gender toggling (Male/Female) and interactive stepper logic for age adjustment (range: 5 to 100 years), updating the persistent Profile summary row: <code class="text-slate-200 font-mono">"{Gender}, {Age} yrs"</code>.
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-              <span class="text-xs font-bold text-white flex items-center justify-between">
-                <span>Dynamic Severity Color-Theming Engine</span>
-                <span class="text-[10px] text-brand-accent font-mono">FR-04</span>
-              </span>
-              <p class="text-xs text-brand-muted leading-relaxed">
-                The visual theme dispatches dynamic hex color sets to SVG gradient stops (<code class="text-brand-accent font-mono">gradStop1</code>, <code class="text-brand-teal font-mono">gradStop2</code>), the BMI status badge, and the Prime Status tag based on the classification severity.
-              </p>
-            </div>
-          </div>
-
-          <!-- SVG Math Formula -->
-          <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-2">
-            <span class="text-xs font-bold text-white flex items-center justify-between">
-              <span>Vector Gauge Circumference &amp; Stroke Dash Offset Equation</span>
-              <span class="text-[10px] text-brand-accent font-mono">FR-05</span>
-            </span>
-            <div class="bg-brand-bg p-3 rounded-lg border border-brand-border font-mono text-xs text-cyan-300">
-              Circumference = 2 × π × 90 ≈ 565.487 px<br>
-              StrokeOffset = Circumference - (GaugePercent / 100) × Circumference
-            </div>
-            <p class="text-xs text-brand-muted leading-relaxed">
-              The SVG circle uses <code class="text-slate-200 font-mono">stroke-dasharray="565.48"</code>. Smooth CSS hardware-accelerated transitions dynamically interpolate <code class="text-slate-200 font-mono">stroke-dashoffset</code> across status updates.
-            </p>
           </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SECTION 4: DATA FLOW & IPC PROTOCOL        -->
-        <!-- ========================================== -->
         <section id="sec-protocol" class="trd-section space-y-4">
           <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
             <span>[ Section 04 ]</span>
             <div class="h-px bg-brand-border flex-grow"></div>
           </div>
           <h3 class="text-lg sm:text-xl font-bold text-white">4. Data Flow &amp; Communication Protocol Schema</h3>
-
-          <p>
-            Data serialization between MIT App Inventor's block memory and the JavaScript engine avoids JSON overhead by leveraging a high-speed pipe-delimited packet structure.
-          </p>
-
-          <div class="bg-brand-void p-4 rounded-xl border border-brand-border space-y-2">
-            <div class="text-[11px] font-mono text-brand-muted uppercase tracking-wider">App Inventor → WebViewer Payload Schema</div>
-            <div class="font-mono text-xs text-brand-accent p-2.5 rounded bg-brand-bg border border-brand-border overflow-x-auto">
-              [BMI] | [StatusTag] | [HealthyRange] | [PrimeStatus] | [HeightCm] | [WeightKg] | [GaugePercentage]
-            </div>
-            <div class="text-[11px] font-mono text-slate-400">
-              Example Packet: <span class="text-slate-200">"22.4|Normal Weight|56.7 – 76.3 kg|Optimal Zone|175|68.5|55"</span>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs border border-brand-border rounded-lg overflow-hidden">
-              <thead class="bg-brand-card text-brand-muted font-mono uppercase text-[10px]">
-                <tr>
-                  <th class="p-3">Index</th>
-                  <th class="p-3">Field Name</th>
-                  <th class="p-3">Data Type</th>
-                  <th class="p-3">DOM Target ID</th>
-                  <th class="p-3">Sample Value</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-brand-border font-mono text-[11px] text-slate-300">
-                <tr><td class="p-3 text-brand-accent">0</td><td>BMI</td><td>Float (1 dec)</td><td>#bmiValue</td><td>22.4</td></tr>
-                <tr><td class="p-3 text-brand-accent">1</td><td>StatusTag</td><td>String</td><td>#bmiStatus</td><td>Normal Weight</td></tr>
-                <tr><td class="p-3 text-brand-accent">2</td><td>HealthyRange</td><td>String</td><td>#healthyRange</td><td>56.7 – 76.3 kg</td></tr>
-                <tr><td class="p-3 text-brand-accent">3</td><td>PrimeStatus</td><td>String</td><td>#primeStatus</td><td>Optimal Zone</td></tr>
-                <tr><td class="p-3 text-brand-accent">4</td><td>HeightCm</td><td>Float</td><td>#statHeight</td><td>175 cm</td></tr>
-                <tr><td class="p-3 text-brand-accent">5</td><td>WeightKg</td><td>Float</td><td>#statWeight</td><td>68.5 kg</td></tr>
-                <tr><td class="p-3 text-brand-accent">6</td><td>GaugePercent</td><td>Integer (0-100)</td><td>#progressCircle</td><td>55</td></tr>
-              </tbody>
-            </table>
+          <div class="font-mono text-xs text-brand-accent p-3 rounded bg-brand-void border border-brand-border">
+            [BMI] | [StatusTag] | [HealthyRange] | [PrimeStatus] | [HeightCm] | [WeightKg] | [GaugePercentage]
           </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SECTION 5: NON-FUNCTIONAL REQUIREMENTS     -->
-        <!-- ========================================== -->
         <section id="sec-nonfunc" class="trd-section space-y-4">
           <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
             <span>[ Section 05 ]</span>
             <div class="h-px bg-brand-border flex-grow"></div>
           </div>
           <h3 class="text-lg sm:text-xl font-bold text-white">5. Non-Functional &amp; Operational Requirements</h3>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1">
-              <div class="font-bold text-white flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-brand-accent"></span> Zero-Network Autonomy (NFR-01)
-              </div>
-              <p class="text-brand-muted leading-relaxed">
-                App strictly operates without Wi-Fi or Cellular data. No remote analytic SDKs or telemetry beacons are injected, guaranteeing 100% HIPAA/GDPR health data privacy on-device.
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1">
-              <div class="font-bold text-white flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-brand-teal"></span> Sub-100ms Input-to-Render Latency (NFR-02)
-              </div>
-              <p class="text-brand-muted leading-relaxed">
-                Poll frequency of 150ms ensures that any user calculation dispatched from native App Inventor blocks renders on the DOM with an imperceptible perceptual delay (&lt; 85ms).
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1">
-              <div class="font-bold text-white flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Adaptive Mobile Viewports (NFR-03)
-              </div>
-              <p class="text-brand-muted leading-relaxed">
-                Supports fluid aspect ratios spanning 16:9 to 21:9 across standard 320px compact devices up to large 11-inch Android tablets with dynamic font scaling.
-              </p>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border space-y-1">
-              <div class="font-bold text-white flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-purple-400"></span> Persistent Memory State (NFR-04)
-              </div>
-              <p class="text-brand-muted leading-relaxed">
-                TinyDB cache holds the most recently evaluated parameters under tag <code class="text-slate-200 font-mono">"lastCalculation"</code>, preventing cold-start data loss across restarts.
-              </p>
-            </div>
-          </div>
+          <p class="text-brand-muted">Zero-network autonomy (NFR-01), sub-100ms render latency (NFR-02), and robust local TinyDB caching guarantee privacy and speed.</p>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SECTION 6: HARDWARE & SOFTWARE DEPS        -->
-        <!-- ========================================== -->
-        <section id="sec-deps" class="trd-section space-y-3">
-          <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
-            <span>[ Section 06 ]</span>
-            <div class="h-px bg-brand-border flex-grow"></div>
-          </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white">6. Hardware &amp; Software Dependencies</h3>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border">
-              <span class="font-bold text-white block mb-2">Host Platform Specifications</span>
-              <ul class="space-y-1.5 text-brand-muted">
-                <li><strong class="text-slate-200">Target Framework:</strong> MIT App Inventor 2 (Build 30+)</li>
-                <li><strong class="text-slate-200">Minimum Android API:</strong> API 21 (Android 5.0 Lollipop)</li>
-                <li><strong class="text-slate-200">Recommended Android API:</strong> API 29+ (Android 10 - 16)</li>
-                <li><strong class="text-slate-200">Hardware Requirements:</strong> 1.0 GHz ARM/x86 CPU, 512MB RAM</li>
-              </ul>
-            </div>
-
-            <div class="bg-brand-card p-4 rounded-xl border border-brand-border">
-              <span class="font-bold text-white block mb-2">Browser Engine &amp; Web Standards</span>
-              <ul class="space-y-1.5 text-brand-muted">
-                <li><strong class="text-slate-200">Rendering Engine:</strong> Android System WebView (Chromium M80+)</li>
-                <li><strong class="text-slate-200">Graphic Standards:</strong> SVG 2.0 with CSS Stroke Dashoffset</li>
-                <li><strong class="text-slate-200">Scripting Standard:</strong> ECMAScript 6 (ES6 Vanilla JS)</li>
-                <li><strong class="text-slate-200">Security Clearance:</strong> Local Asset Sandbox (UsesLocation: False)</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- SECTION 7: VERIFICATION & TESTING MATRIX   -->
-        <!-- ========================================== -->
         <section id="sec-matrix" class="trd-section space-y-4">
           <div class="flex items-center gap-2 text-brand-accent font-mono text-xs font-bold uppercase tracking-wider">
             <span>[ Section 07 ]</span>
             <div class="h-px bg-brand-border flex-grow"></div>
           </div>
           <h3 class="text-lg sm:text-xl font-bold text-white">7. Quality Assurance &amp; Verification Matrix</h3>
-
           <div class="overflow-x-auto rounded-xl border border-brand-border">
             <table class="w-full text-left text-xs">
               <thead class="bg-brand-card text-brand-muted font-mono uppercase text-[10px]">
                 <tr>
                   <th class="p-3">Test ID</th>
                   <th class="p-3">Test Condition</th>
-                  <th class="p-3">Demographics &amp; Vector</th>
                   <th class="p-3">Expected Theme &amp; Behavior</th>
                   <th class="p-3">Status</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-brand-border font-mono text-[11px] text-slate-300">
-                <tr>
-                  <td class="p-3 text-brand-accent">TC-01</td>
-                  <td>Normal Weight Range</td>
-                  <td>Male, 25y | H: 175cm, W: 68.5kg</td>
-                  <td>BMI: 22.4, Status: "Normal Weight", Theme: #00D29D, Gauge: 55%</td>
-                  <td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-brand-accent">TC-02</td>
-                  <td>Underweight Boundary</td>
-                  <td>Female, 20y | H: 180cm, W: 55.0kg</td>
-                  <td>BMI: 17.0, Status: "Underweight", Theme: #38bdf8, Gauge: 25%</td>
-                  <td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-brand-accent">TC-03</td>
-                  <td>Overweight Boundary</td>
-                  <td>Male, 38y | H: 170cm, W: 78.0kg</td>
-                  <td>BMI: 27.0, Status: "Overweight", Theme: #facc15, Gauge: 75%</td>
-                  <td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-brand-accent">TC-04</td>
-                  <td>Obesity Boundary</td>
-                  <td>Female, 45y | H: 165cm, W: 90.0kg</td>
-                  <td>BMI: 33.1, Status: "Obesity", Theme: #ef4444, Gauge: 95%</td>
-                  <td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-brand-accent">TC-05</td>
-                  <td>Offline Flight Mode</td>
-                  <td>Airplane Mode: Enabled</td>
-                  <td>HTML loads with zero errors, IPC &amp; animations intact</td>
-                  <td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td>
-                </tr>
+                <tr><td class="p-3 text-brand-accent">TC-01</td><td>Normal Weight Range (175cm, 68.5kg)</td><td>BMI: 22.4, Status: Normal Weight (#00D29D)</td><td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td></tr>
+                <tr><td class="p-3 text-brand-accent">TC-05</td><td>Offline Flight Mode</td><td>HTML loads with zero errors, animations intact</td><td><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-brand-accent text-[10px]">PASSED</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -1019,7 +798,6 @@
 
       </div>
 
-      <!-- Modal Bottom Actions Bar -->
       <div class="px-6 py-4 border-t border-brand-border bg-brand-card/90 flex flex-col sm:flex-row items-center justify-between gap-3 flex-shrink-0 text-xs">
         <span class="text-brand-muted">Press <kbd class="px-1.5 py-0.5 rounded bg-brand-bg border border-brand-border text-slate-300 font-mono text-[10px]">ESC</kbd> to exit modal</span>
         <div class="flex items-center gap-3">
@@ -1031,99 +809,93 @@
           </button>
         </div>
       </div>
-
     </div>
   </div>
 
   <!-- ======================================================== -->
-  <!-- 8. INTERACTIVE JAVASCRIPT LOGIC                          -->
+  <!-- 9. POPUP MODAL: PRIVACY POLICY                           -->
+  <!-- ======================================================== -->
+  <div id="privacy-modal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title">
+    <div class="modal-container w-full max-w-3xl bg-brand-bg border border-brand-border rounded-2xl shadow-modal overflow-hidden flex flex-col max-h-[92vh]">
+      
+      <div class="px-5 py-4 border-b border-brand-border bg-brand-card/90 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-cyan-500/15 text-cyan-400 flex items-center justify-center border border-cyan-500/30">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <div>
+            <h2 id="privacy-modal-title" class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
+              CalcuFit Privacy Policy
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 font-semibold">100% LOCAL STORAGE</span>
+            </h2>
+            <p class="text-[11px] text-brand-muted">Committed to Zero Data Collection &amp; Complete Offline Privacy</p>
+          </div>
+        </div>
+        <button onclick="closePrivacyModal()" class="p-2 rounded-lg bg-brand-border/40 hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 transition" aria-label="Close modal">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="p-6 sm:p-8 overflow-y-auto space-y-6 text-slate-200 text-xs sm:text-sm leading-relaxed font-normal">
+        <section class="space-y-2">
+          <h3 class="text-base font-bold text-white border-b border-brand-border pb-2">1. Information We Collect &amp; Store</h3>
+          <p class="text-brand-muted">
+            CalcuFit is designed with privacy as a foundational principle. Your measurements (height, weight, age, and gender) and calculated BMI results remain strictly in the app’s local device storage (TinyDB).
+          </p>
+        </section>
+
+        <section class="space-y-2">
+          <h3 class="text-base font-bold text-white border-b border-brand-border pb-2">2. Zero Internet Transmission</h3>
+          <p class="text-brand-muted">
+            CalcuFit does not transmit your personal health measurements or calculated statistics to the developer, external servers, or third-party analytics providers. The app operates completely offline without network permissions.
+          </p>
+        </section>
+
+        <section class="space-y-2">
+          <h3 class="text-base font-bold text-white border-b border-brand-border pb-2">3. Data Removal</h3>
+          <p class="text-brand-muted">
+            You can clear your saved calculation history and cached local data at any time by clearing the app’s local storage through your Android system settings or by uninstalling the application.
+          </p>
+        </section>
+      </div>
+
+      <div class="px-6 py-4 border-t border-brand-border bg-brand-card/90 flex items-center justify-between flex-shrink-0 text-xs">
+        <span class="text-brand-muted">Developed by Johnrey Camacho</span>
+        <button onclick="closePrivacyModal()" class="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-brand-void font-extrabold transition">
+          Close Policy
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 10. JAVASCRIPT CONTROLLERS                               -->
   <!-- ======================================================== -->
   <script>
-    const circumference = 2 * Math.PI * 90; // ~565.487
+    const circumference = 2 * Math.PI * 90;
     let simGender = "Male";
     let simAge = 25;
 
-    const showcaseVideo = document.getElementById('showcase-video');
-    const showcaseSoundtrack = document.getElementById('showcase-soundtrack');
-    const showcaseAudioStatus = document.getElementById('showcase-audio-status');
-    const enableShowcaseSoundButton = document.getElementById('showcase-enable-sound');
-
-    async function syncShowcaseSoundtrack() {
-      if (showcaseVideo.paused || showcaseVideo.ended) {
-        showcaseSoundtrack.pause();
-        return;
-      }
-
-      showcaseSoundtrack.currentTime = showcaseVideo.currentTime;
-      showcaseSoundtrack.playbackRate = showcaseVideo.playbackRate;
-      showcaseSoundtrack.muted = showcaseVideo.muted;
-      showcaseSoundtrack.volume = showcaseVideo.volume;
-
-      try {
-        await showcaseSoundtrack.play();
-        enableShowcaseSoundButton.hidden = true;
-        showcaseAudioStatus.textContent = 'Original instrumental soundtrack playing.';
-      } catch (error) {
-        console.error('Showcase soundtrack playback failed:', error);
-        showcaseAudioStatus.textContent = 'Sound could not start automatically. Select Enable soundtrack to hear the video.';
-        enableShowcaseSoundButton.hidden = false;
-      }
+    /* PRD Modal Controls */
+    function openPrdModal() {
+      const modal = document.getElementById('prd-modal');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      hideHelpDropdown();
     }
 
-    showcaseVideo.addEventListener('play', syncShowcaseSoundtrack);
-    showcaseVideo.addEventListener('pause', () => showcaseSoundtrack.pause());
-    showcaseVideo.addEventListener('ended', () => {
-      showcaseSoundtrack.pause();
-      showcaseSoundtrack.currentTime = 0;
-      showcaseAudioStatus.textContent = 'Showcase finished. Replay the video to hear the soundtrack again.';
-    });
-    showcaseVideo.addEventListener('seeking', () => showcaseSoundtrack.pause());
-    showcaseVideo.addEventListener('seeked', syncShowcaseSoundtrack);
-    showcaseVideo.addEventListener('ratechange', () => {
-      showcaseSoundtrack.playbackRate = showcaseVideo.playbackRate;
-    });
-    showcaseVideo.addEventListener('volumechange', () => {
-      showcaseSoundtrack.muted = showcaseVideo.muted;
-      showcaseSoundtrack.volume = showcaseVideo.volume;
-    });
-    showcaseSoundtrack.addEventListener('error', () => {
-      showcaseAudioStatus.textContent = 'The soundtrack file could not be loaded. Check that the showcase audio file is available.';
-      enableShowcaseSoundButton.hidden = true;
-      console.error('Showcase soundtrack failed to load:', showcaseSoundtrack.error);
-    });
-    enableShowcaseSoundButton.addEventListener('click', syncShowcaseSoundtrack);
-
-    /* Gender and Age Interactive Handlers for Phone Mockup */
-    function simSetGender(gender) {
-      simGender = gender;
-      const btnM = document.getElementById('sim-btn-male');
-      const btnF = document.getElementById('sim-btn-female');
-
-      if (gender === 'Male') {
-        btnM.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 bg-[#1e293b] text-[#00d29d] border border-[#2e3e55]';
-        btnF.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 text-[#6c7c93] hover:text-white border-transparent';
-      } else {
-        btnF.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 bg-[#1e293b] text-[#00d29d] border border-[#2e3e55]';
-        btnM.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 text-[#6c7c93] hover:text-white border-transparent';
-      }
-      simUpdateProfileText();
+    function closePrdModal() {
+      const modal = document.getElementById('prd-modal');
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
     }
 
-    function simAdjustAge(delta) {
-      simAge = Math.max(5, Math.min(100, simAge + delta));
-      document.getElementById('sim-disp-age').innerText = simAge;
-      simUpdateProfileText();
-    }
-
-    function simUpdateProfileText() {
-      document.getElementById('sim-stat-profile').innerText = `${simGender}, ${simAge} yrs`;
-    }
-
-    /* Modal Control Logic */
+    /* TRD Modal Controls */
     function openTrdModal(anchorId = null) {
       const modal = document.getElementById('trd-modal');
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
+      hideHelpDropdown();
 
       if (anchorId) {
         setTimeout(() => {
@@ -1143,6 +915,20 @@
 
     function openTrdSection(sectionId) {
       openTrdModal(sectionId);
+    }
+
+    /* Privacy Policy Modal Controls */
+    function openPrivacyModal() {
+      const modal = document.getElementById('privacy-modal');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      hideHelpDropdown();
+    }
+
+    function closePrivacyModal() {
+      const modal = document.getElementById('privacy-modal');
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
     }
 
     /* Help Dropdown Toggle */
@@ -1169,11 +955,13 @@
     window.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closeTrdModal();
+        closePrdModal();
+        closePrivacyModal();
         hideHelpDropdown();
       }
     });
 
-    /* Filter sections via tabs inside modal */
+    /* Filter sections via tabs inside TRD modal */
     function switchTab(tabKey) {
       const buttons = ['all', 'team', 'arch', 'func', 'nonfunc', 'matrix'];
       buttons.forEach(k => {
@@ -1201,7 +989,32 @@
       }
     }
 
-    /* Phone Simulator Severity Theming and Calculation Logic */
+    /* Phone Simulator Handlers */
+    function simSetGender(gender) {
+      simGender = gender;
+      const btnM = document.getElementById('sim-btn-male');
+      const btnF = document.getElementById('sim-btn-female');
+
+      if (gender === 'Male') {
+        btnM.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 bg-[#1e293b] text-[#00d29d] border border-[#2e3e55]';
+        btnF.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 text-[#6c7c93] hover:text-white border-transparent';
+      } else {
+        btnF.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 bg-[#1e293b] text-[#00d29d] border border-[#2e3e55]';
+        btnM.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 text-[#6c7c93] hover:text-white border-transparent';
+      }
+      simUpdateProfileText();
+    }
+
+    function simAdjustAge(delta) {
+      simAge = Math.max(5, Math.min(100, simAge + delta));
+      document.getElementById('sim-disp-age').innerText = simAge;
+      simUpdateProfileText();
+    }
+
+    function simUpdateProfileText() {
+      document.getElementById('sim-stat-profile').innerText = `${simGender}, ${simAge} yrs`;
+    }
+
     function simulateRecalculate() {
       const hInput = parseFloat(document.getElementById('sim-input-height').value);
       const wInput = parseFloat(document.getElementById('sim-input-weight').value);
@@ -1254,7 +1067,6 @@
         bgTag = "rgba(239, 68, 68, 0.15)";
       }
 
-      // Update Mockup Elements
       document.getElementById('sim-bmi-val').innerText = bmi;
       const badge = document.getElementById('sim-bmi-badge');
       badge.style.backgroundColor = bgTag;
@@ -1266,11 +1078,9 @@
       primeEl.innerText = primeStatus;
       primeEl.style.color = color1;
 
-      // Update Dynamic SVG Gradient Stops
       document.getElementById('sim-grad-stop1').setAttribute('stop-color', color1);
       document.getElementById('sim-grad-stop2').setAttribute('stop-color', color2);
 
-      // Update SVG Circular Meter Offset
       const circle = document.getElementById('sim-progress-circle');
       const offset = circumference - (percent / 100) * circumference;
       circle.style.strokeDashoffset = offset;
@@ -1278,7 +1088,6 @@
       simUpdateProfileText();
     }
 
-    // Initialize Simulator at Default State
     window.addEventListener('load', () => {
       simulateRecalculate();
     });
